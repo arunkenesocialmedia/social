@@ -1,0 +1,905 @@
+
+<html>
+
+    <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    
+    <style>
+        
+        ul {
+            transform: translateX(3%);
+        }
+        
+        .loader {
+          border: 16px solid gray;
+          border-top: 16px solid blue;
+          border-radius: 50%;
+          width: 200px;
+          height: 200px;
+          animation: spin 2s ease-out infinite;
+        }
+        
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        
+        #myInput {
+          background-image: url('searchicon.png'); /* Add a search icon to input */
+          background-position: 10px 12px; /* Position the search icon */
+          background-repeat: no-repeat; /* Do not repeat the icon image */
+          background-size: 20px 20px;
+          width: 100%; /* Full-width */
+          font-size: 16px; /* Increase font-size */
+          padding: 12px 20px 12px 40px; /* Add some padding */
+          border: 2px solid blue; /* Add a grey border */
+          margin-bottom: 12px; /* Add some space below the input */
+          margin-top: 0px;
+        }
+
+        #myTable {
+          /*border-collapse: collapse;*/ /* Collapse borders */
+          width: 100%; /* Full-width */
+          border: 2px solid blue; /* Add a grey border */
+          font-size: 18px; /* Increase font-size */
+        }
+
+        #myTable th, #myTable td {
+          padding: 12px; /* Add padding */
+        }
+        
+        #myTable th {
+            font-size: 40;
+            text-align: center;
+        }
+        
+        #myTable td {
+            font-size: 30;
+        }
+
+        #myTable tr {
+          /* Add a bottom border to all table rows */
+          border-bottom: 1px solid #ddd; 
+        }
+
+        #mybooks{
+            width: 100%;
+        }
+        
+        .avatar{
+            vertical-align: middle;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            filter: brightness(1);
+        }
+        
+        .avatar:hover{
+            filter: brightness(1);
+        }
+        
+        body{
+            -webkit-animation: bgcolor 30s infinite; 
+            animation: bgcolor 30s infinite;
+        }
+        
+        
+        @-webkit-keyframes bgcolor {
+             0%  {background: #ffffff;}
+            20%  {background: #e5e5ff;}
+            40%  {background: #ccccff;}
+            60%  {background: #b2b2ff;}
+            80% {background: #ccccff;}
+            100% {background: #ffffff;}
+        }
+        @keyframes bgcolor {
+             0%  {background: #ffffff;}
+            20%  {background: #e5e5ff;}
+            40%  {background: #ccccff;}
+            60%  {background: #b2b2ff;}
+            80% {background: #ccccff;}
+            100% {background: #ffffff;}
+        }
+        
+        #myphoto {
+            cursor: pointer;
+        }
+        
+        /* The Modal (background) */
+        .modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(0,0,0); /* Fallback color */
+          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+          background-color: #fefefe;
+          margin: 5% auto; /* 15% from the top and centered */
+          padding: 10px;
+          border: 1px solid #888;
+          width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .closes {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+        }
+
+        .closes:hover,
+        .closes:focus {
+          color: black;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        
+        #close{
+            padding: 8px 16px;
+            background-color: white;
+            color: black;
+            border: 3px solid black;
+            width: 200px;
+            align-self: center;
+            font-size: 15;
+        }
+        
+        #close:hover{
+            background-color: blue;
+            border: 3px solid blue;
+            color: white;
+            cursor: pointer;
+            font-size: 15;
+        }
+        
+        #twit{
+            width: 100%;
+            height: 400px;
+            border: 3px solid black;
+        }
+        
+        tr:hover {background-color: blue; color: white; cursor: pointer; box-shadow: 0 8px 8px 0 rgba(0,0,0,0.8);}
+        
+        th, td {
+            border: 1px solid blue;
+            text-align: center;
+        }
+        
+        td{
+            padding: 5px;
+        }
+        
+        th{
+            padding: 10px;
+            font-size: 20;
+        }
+        
+        table {
+            width: 100%;
+        }
+        
+        .tweet:hover{
+            background-color: lightgray;
+            cursor: pointer;
+        }
+        .topnav {
+          overflow: hidden;
+          background-color: black;
+          border-bottom: 1px solid white;
+        }
+
+        .topnav a {
+          float: left;
+          color: #f2f2f2;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+          font-size: 17px;
+        }
+
+        .topnav a:hover {
+          background-color: white;
+          color: black;
+        }
+
+        .topnav a.active {
+          background-color: #0000ff;
+          color: white;
+        }
+        
+        .btnat {
+            background-color: blue;
+            font-family: Times New Roman;
+            border: 3px solid white;
+            color: black;
+            padding: 16px 32px;
+            text-align: center;
+            font-size: 25px;
+            transition: 0.2s;
+        }
+
+        .btn {
+            background-color: black;
+            font-family: Times New Roman;
+            border: 3px solid white;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            font-size: 25px;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background-color: white;
+            color: black;
+            cursor: pointer;
+        }
+        
+        #signout:hover {
+            cursor: pointer;
+        }
+        
+        .signbtn{
+            padding: 8px 16px;
+            background-color: white;
+            color: black;
+            border: 3px solid black;
+        }
+        
+        
+        .signbtn:hover{
+            padding: 8px 16px;
+            background-color: limegreen;
+            color: white;
+            border: 3px solid limegreen;
+            cursor: pointer;
+        }
+        
+        .submit {
+          padding: 8px 16px;
+            background-color: white;
+            color: black;
+            border: 3px solid black;
+        }
+        
+        .submit:hover {
+          padding: 8px 16px;
+            background-color: blue;
+            color: white;
+            border: 3px solid blue;
+            cursor: pointer;
+        }
+        
+        #inputFileToLoad{
+            margin-left: 10px;
+        }
+        
+        .topnav {
+            font-family: "Fredoka One";
+            overflow; hidden;
+            background-color:blue;
+            color: white;
+            font-size: 30px;
+            padding: 13px;
+        }
+        .topnav a {
+            color: white;
+            float: right;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            font-family: "Fredoka One";
+            padding: 9px;
+            max-height: 20px;
+            z-index: 5;
+        }
+        .topnav a:hover {
+            background-color:white;
+            color: blue;
+        }
+        .topnav a.active {
+            background-color: white;
+            color: blue;
+        }
+        
+        /* Dropdown Button */
+        .dropbtn {
+            background-color: blue;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+
+        }
+
+        /* Dropdown button on hover & focus */
+        .dropbtn:hover, .dropbtn:focus {
+            background-color: blue;
+        }
+
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+            float: right;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 55px;
+            background-color: white;
+            min-width: 80px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.4);
+            z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: blue;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            float: none;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: blue;
+            color: white;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .modaltext{
+            font-size: 30;
+        }
+    
+    </style>
+    <script>
+        
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDPVd7G8313nLPFN8vBribM8Sfma3Pac1o",
+            authDomain: "test-addbb.firebaseapp.com",
+            databaseURL: "https://test-addbb.firebaseio.com",
+            projectId: "test-addbb",
+            storageBucket: "test-addbb.appspot.com",
+            messagingSenderId: "267017042003"
+        };
+        
+
+
+        firebase.initializeApp(config);
+                
+        // Check to see if you are logged in
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user == null) {
+                alert("Not logged in.");
+                
+                signinbutton = document.getElementById("signin");
+                signinbutton.style.visibility="visible";
+                
+                signoutbutton = document.getElementById("signout");
+                signoutbutton.style.visibility="hidden";
+                
+                return;
+                
+            } else {
+                userId = user.uid;
+                name = user.displayName;
+                imageUrl = user.photoURL;
+                email = user.email;
+                
+                signinbutton = document.getElementById("signin");
+                signinbutton.style.visibility="hidden";
+                
+                signoutbutton = document.getElementById("signout");
+                signoutbutton.style.visibility="visible";
+                    
+                // write user data to users
+                writeUserData(userId, name, email, imageUrl);
+                
+                // write data to document
+                //mydiv = document.getElementById("mydata");
+                //mydiv.innerHTML = name;
+                
+                //myphotodiv = document.getElementById("invis");
+                //myphotodiv.style.visibility="visible";
+                // write user data to users
+                myphotodiv = document.getElementById("myphoto");
+                myphotodiv.innerHTML = "<img id='profilepic' onmouseover='showPic()' src='" + imageUrl + "'style='max-width:40px; max-height:40px; border-radius: 10px; display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
+                
+                photodiv = document.getElementById("modalphoto");
+                var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'></center>";
+                photodiv.innerHTML = modalcontent;
+                
+                showBooks();
+
+                firebase.database().ref('/users').once('value').then(function(snapshot) {
+                    var data = (snapshot.val());
+                    if (data == null) {
+                      console.log("No data found at /users/" + userId);  
+                    } else {
+                        
+                        var userdata = (snapshot.val());
+                        if (userdata != null) {
+                           dataarray = [data,userdata]
+                           console.log(dataarray)
+                           //updatetweets(dataarray); 
+                            updateModal(dataarray);
+                        }
+                      //console.log(data)
+                      //updatetweets(data);
+                    }
+                });
+            } // end user null check
+        }); // end check auth state
+        
+        function encodeImageFileAsURL() {
+
+            var filesSelected = document.getElementById("inputFileToLoad").files;
+            if (filesSelected.length > 0) {
+                var fileToLoad = filesSelected[0];
+                var fileReader = new FileReader();
+                fileReader.onload = function(fileLoadedEvent) {
+                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
+                    //var newImage = document.createElement('img');
+                    //newImage.src = srcData;
+                    //document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+                    //document.getElementById("imgTest").innerHTML = srcData;
+                    //console.log("Converted Base64 version is: " + document.getElementById("imgTest").innerHTML);
+                    //console.log(srcData);
+                }
+                fileReader.readAsDataURL(fileToLoad);
+            }
+        } // end function
+        
+        // write user data
+        function writeUserData(userId, name, email, imageUrl) {
+            firebase.database().ref('users/' + userId).update({
+                username: name,
+                email: email,
+                profile_picture : imageUrl,
+                userId: userId
+            });
+        }
+        
+        function updateModal(data){
+            users = data[1];
+            data = data[0];
+            photodiv = document.getElementById("modalphoto");
+            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p></center>";
+            var yourUsername = "";
+            var yourPic = "";
+            var yourAge = "";
+            var yourBio = "";
+            var yourEmail = "";
+            var yourName = "";
+            var yourFav = "";
+            var yourRecent = "";
+            
+            var updated = false;
+            
+            for (var u in data) {
+                
+                if (users[u].userId = userId && !updated){
+                    
+                    updated = true;
+                    
+                    if (users[u].newName != null) {
+                        yourUsername = users[u].newName;
+                    } 
+                    else {
+                        yourUsername = users[u].username;
+                    }
+
+                    if (users[u].newPic != null) {
+                        yourPic = users[u].newPic;
+                    }
+                    else {
+                        yourPic = users[u].profile_picture;
+                    }
+
+                    if (users[u].email != null) {
+                        yourEmail = users[u].email;
+                    }
+
+                    if (users[u].bio != null) {
+                        yourBio = users[u].bio;
+                    }
+                    else{
+                        yourBio = "N/A"
+                    }
+
+                    if (users[u].age != null) {
+                        yourAge = users[u].age;
+                    }
+                    else{
+                        yourAge = "N/A"
+                    }
+
+                    if (users[u].book != null) {
+                        yourFav = users[u].book;
+                    }
+                    else{
+                        yourFav = "N/A"
+                    }
+
+                    if (users[u].recent != null) {
+                        yourRecent = users[u].recent;
+                    }
+                    else{
+                        yourRecent = "N/A"
+                    }
+                    
+                    modalcontent = modalcontent + "<center><p class='modaltext'>Username: " + yourUsername + "<br>Bio: " + yourBio + "<br>Age: " + yourAge + "<br>Favourite Book: " + yourFav + "<br>Most Recent Read: " + yourRecent + "</p></center>";
+                    photodiv.innerHTML = modalcontent;
+                    
+                }
+                
+            }
+            
+        }
+        
+        function openPotter(){
+            var bdisplay = {};
+            bdisplay[0] = "<button>yes</button>";
+            document.getElementById("bookdisplay").innerHTML = bdisplay[0];
+            document.getElementById("bookdisplay").style.display = "block";
+            document.getElementById("mybooks").style.display = "none";
+            //alert("opening");
+        }
+        
+        function openBook(b){
+            
+            var titles = {};
+            
+            titles[0] = "Harry Potter";
+            titles[1] = "Percy Jackson and the Olympians";
+            titles[2] = "I Am Number Four";
+            titles[3] = "Diary of a Wimpy Kid";
+            titles[4] = "Hunger Games";
+            
+            document.getElementById("booktitle").innerHTML = titles[b-1];
+            
+            var bdisplay = {};
+            
+            bdisplay[0] = "<img width='25%' style='border: solid 3px black; float: left; margin-right: 2%' src='potter.jpg'>";
+            bdisplay[0] = bdisplay[0] + "<div><br>";
+            bdisplay[0] = bdisplay[0] + "<h3>Author: J.K. Rowling</h3>";
+            bdisplay[0] = bdisplay[0] + "<h3>Number of Books in Series: 7</h3>";
+            bdisplay[0] = bdisplay[0] + "<h3>Series Began: 1997</h3>";
+            bdisplay[0] = bdisplay[0] + "<h3>Series Finished: 2007</h3>";
+            bdisplay[0] = bdisplay[0] + "<h3>Book Titles: </h3>";
+            bdisplay[0] = bdisplay[0] + "<ul>";
+            bdisplay[0] = bdisplay[0] + "<li>Book One: The Philosopher's Stone</li>";
+            bdisplay[0] = bdisplay[0] + "<li>Book Two: The Chamber of Secrets</li>";
+            bdisplay[0] = bdisplay[0] + "<li>Book Three: The Prisoner of Azkaban</li>";
+            bdisplay[0] = bdisplay[0] + "<li>Book Four: The Goblet of Fire</li>";
+            bdisplay[0] = bdisplay[0] + "<li>Book Five: The Order of the Phoenix</li>";
+            bdisplay[0] = bdisplay[0] + "<li>Book Six: Half-Blood Prince</li>";
+            bdisplay[0] = bdisplay[0] + "<li>Book Seven: The Deathly Hallows</li>";
+            bdisplay[0] = bdisplay[0] + "</ul>";
+            bdisplay[0] = bdisplay[0] + "</div>";
+            
+            
+            bdisplay[1] = "<img width='25%' style='border: solid 3px black; float: left; margin-right: 2%' src='jackson.jpg'>";
+            bdisplay[1] = bdisplay[1] + "<div><br>";
+            bdisplay[1] = bdisplay[1] + "<h3>Author: Rick Riordan</h3>";
+            bdisplay[1] = bdisplay[1] + "<h3>Number of Books in Series: 5</h3>";
+            bdisplay[1] = bdisplay[1] + "<h3>Series Began: 2005</h3>";
+            bdisplay[1] = bdisplay[1] + "<h3>Series Finished: 2010</h3>";
+            bdisplay[1] = bdisplay[1] + "<h3>Book Titles: </h3>";
+            bdisplay[1] = bdisplay[1] + "<ul>";
+            bdisplay[1] = bdisplay[1] + "<li>Book One: The Lightning Thief</li>";
+            bdisplay[1] = bdisplay[1] + "<li>Book Two: The Sea of Monsters</li>";
+            bdisplay[1] = bdisplay[1] + "<li>Book Three: The Titan's Cruse</li>";
+            bdisplay[1] = bdisplay[1] + "<li>Book Four: The Battle of the Labyrinth</li>";
+            bdisplay[1] = bdisplay[1] + "<li>Book Five: The Lasy Olympian</li>";
+            bdisplay[1] = bdisplay[1] + "</ul>";
+            bdisplay[1] = bdisplay[1] + "</div>";
+            
+            bdisplay[2] = "<img width='25%' style='border: solid 3px black; float: left; margin-right: 2%' src='four.jpg'>";
+            bdisplay[2] = bdisplay[2] + "<div><br>";
+            bdisplay[2] = bdisplay[2] + "<h3>Author: Pittacus Lore</h3>";
+            bdisplay[2] = bdisplay[2] + "<h3>Number of Books in Series: 7</h3>";
+            bdisplay[2] = bdisplay[2] + "<h3>Series Began: 2005</h3>";
+            bdisplay[2] = bdisplay[2] + "<h3>Series Finished: 2010</h3>";
+            bdisplay[2] = bdisplay[2] + "<h3>Book Titles: </h3>";
+            bdisplay[2] = bdisplay[2] + "<ul>";
+            bdisplay[2] = bdisplay[2] + "<li>Book One: I Am Number Four</li>";
+            bdisplay[2] = bdisplay[2] + "<li>Book Two: The Power of Six</li>";
+            bdisplay[2] = bdisplay[2] + "<li>Book Three: The Rise of Nine</li>";
+            bdisplay[2] = bdisplay[2] + "<li>Book Four: The Fall of Five</li>";
+            bdisplay[2] = bdisplay[2] + "<li>Book Five: The Revenge of Seven</li>";
+            bdisplay[2] = bdisplay[2] + "<li>Book Six: The Fate of Ten</li>";
+            bdisplay[2] = bdisplay[2] + "</ul>";
+            bdisplay[2] = bdisplay[2] + "</div>";
+            
+            bdisplay[3] = "<img width='25%' style='border: solid 3px black; float: left; margin-right: 2%' src='diary.jpg'>";
+            bdisplay[3] = bdisplay[3] + "<div><br>";
+            bdisplay[3] = bdisplay[3] + "<h3>Author: Jeff Kinney</h3>";
+            bdisplay[3] = bdisplay[3] + "<h3>Number of Books in Series: 21</h3>";
+            bdisplay[3] = bdisplay[3] + "<h3>Series Began: 2007</h3>";
+            bdisplay[3] = bdisplay[3] + "<h3>Series Finished: Ongoing</h3>";
+            bdisplay[3] = bdisplay[3] + "</div>";
+            
+            bdisplay[4] = "<img width='25%' style='border: solid 3px black; float: left; margin-right: 2%' src='hunger.png'>";
+            bdisplay[4] = bdisplay[4] + "<div><br>";
+            bdisplay[4] = bdisplay[4] + "<h3>Author: Suzanne Collins</h3>";
+            bdisplay[4] = bdisplay[4] + "<h3>Number of Books in Series: 3</h3>";
+            bdisplay[4] = bdisplay[4] + "<h3>Series Began: 2008</h3>";
+            bdisplay[4] = bdisplay[4] + "<h3>Series Finished: 2010</h3>";
+            bdisplay[4] = bdisplay[4] + "<h3>Book Titles: </h3>";
+            bdisplay[4] = bdisplay[4] + "<ul>";
+            bdisplay[4] = bdisplay[4] + "<li>Book One: The Hunger Games</li>";
+            bdisplay[4] = bdisplay[4] + "<li>Book Two: Catching Fire</li>";
+            bdisplay[4] = bdisplay[4] + "<li>Book Three: Mockingjay</li>";
+            bdisplay[4] = bdisplay[4] + "</ul>";
+            bdisplay[4] = bdisplay[4] + "</div>";
+            
+            document.getElementById("bookdisplay").innerHTML = bdisplay[b-1];
+            document.getElementById("bookdisplay").style.display = "block";
+            document.getElementById("mybooks").style.display = "none";
+            document.getElementById("topsearch").style.display = "none";
+        }
+        
+        function showBooks() {
+            
+            var mytab = "<table id='myTable'>"
+            
+            mytab = mytab + "<tr class='header'><th width='15%'>Cover</th><th>Title</th><th>Author</th><th>Number of Books</th></tr>";
+            
+            mytab = mytab + "<tr onclick='openBook(1)'>";
+            mytab = mytab + "<td style='padding: 0px' width='15%'><img src='potter.jpg' width='100%'></td>";
+            mytab = mytab + "<td width='40%'>Harry Potter</td> <td>J.K. Rowling</td> <td>7</td>";
+            mytab = mytab + "</tr>";
+            
+            mytab = mytab + "<tr onclick='openBook(2)'>";
+            mytab = mytab + "<td style='padding: 0px' width='15%'><img src='jackson.jpg' width='100%'></td>";
+            mytab = mytab + "<td width='40%'>Percy Jackson and the Olympians</td> <td>Rick Riordan</td> <td>5</td>";
+            mytab = mytab + "</tr>";
+            
+            mytab = mytab + "<tr onclick='openBook(3)'>";
+            mytab = mytab + "<td style='padding: 0px' width='15%'><img src='four.jpg' width='100%'></td>";
+            mytab = mytab + "<td width='40%'>I Am Number Four</td> <td>Pittacus Lore</td> <td>7</td>";
+            mytab = mytab + "</tr>";
+            
+            mytab = mytab + "<tr onclick='openBook(4)'>";
+            mytab = mytab + "<td style='padding: 0px' width='15%'><img src='diary.jpg' width='100%'></td>";
+            mytab = mytab + "<td width='40%'>Diary of a Wimpy Kid</td> <td>Jeff Kinney</td> <td>21</td>";
+            mytab = mytab + "</tr>";
+            
+            mytab = mytab + "<tr onclick='openBook(5)'>";
+            mytab = mytab + "<td style='padding: 0px' width='15%'><img src='hunger.png' width='100%'></td>";
+            mytab = mytab + "<td width='40%'>Hunger Games</td> <td>Suzanne Collins</td> <td>3</td>";
+            mytab = mytab + "</tr>";
+            
+            mytab = mytab + "</table>";
+            
+            mydiv = document.getElementById("mybooks");
+            mydiv.innerHTML = mytab;
+            
+            //var mylist = "<ul>";
+            
+            /*firebase.database().ref('/books').once('value').then(function(snapshot) { 
+                var bookdata = (snapshot.val());
+                    dataarray = [bookdata]
+                    console.log(bookdata);
+                    books = dataarray[0];
+                
+                    var mytab = "<table id='myTable'><tr class='header'><th>Cover</th><th>Series Name</th><th>Author</th><tr>";
+
+                    for (var b in books) {
+                        mytab = mytab + "<tr onclick='openBook(" + b + ")'>";
+                        mytab = mytab + "<td><center><img class='avatar' src='" + books[b].cover + "' width='60px'></center></td>";
+                        mytab = mytab + "<td>" + books[b].title + "</td>";
+                        mytab = mytab + "<td>" + books[b].author + "</td>";
+                        mytab = mytab + "</tr>";
+                    }
+                    mytab = mytab + "</table>"
+                    var mytdiv = document.getElementById("mybooks");
+                    mytdiv.innerHTML = mytab;
+                
+                
+            });*/
+        }
+        
+        function signin() {
+            console.log("Signing in");
+            var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithRedirect(provider).then(function(result) { 
+                window.location.replace("fbtest.html");
+            });
+        }
+        
+        function signout() {
+            console.log("Signing out");
+            firebase.auth().signOut().then(function() {
+            });
+        }
+        
+        function openProfile(){
+            closebtn = document.getElementById("closebtn");
+            closebtn.innerHTML = "<button onclick='closeProfile()'>---</button>";
+            tweets = document.getElementById("mytweets");
+            tweets.style.display = "block";
+        }
+        
+        function closeProfile(){
+            closebtn = document.getElementById("closebtn");
+            closebtn.innerHTML = "<button onclick='openProfile()'>+++</button>";
+            tweets = document.getElementById("mytweets");
+            tweets.style.display = "none";
+        }
+        
+        function showPic(){
+            pic = document.getElementById("profilepic");
+            
+        }
+
+        function makeCyan(str){
+            var k = document.getElementById(str);
+            str.style.color = "cyan";
+        }
+        
+        function makeWhite(str){
+            var k = document.getElementById(str);
+            str.style.color = "white";
+        }
+        
+        function searchFunction() {
+          // Declare variables 
+          var input, filter, table, tr, td, i, txtValue;
+          input = document.getElementById("myInput");
+          filter = input.value.toUpperCase();
+          table = document.getElementById("myTable");
+          tr = table.getElementsByTagName("tr");
+
+          // Loop through all table rows, and hide those who don't match the search query
+          for (i = 1; i < tr.length; i++) {
+            var shown = false;
+            td = tr[i].getElementsByTagName("td")[1];
+            tf = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+              txtValue = td.textContent || td.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+                shown = true;
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+              
+            if (tf) {
+              txtValue = tf.textContent || tf.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+                shown = true;
+              } else {
+                tr[i].style.display = "none";
+              }
+            }
+            
+            if (!shown){
+                tr[i].style.display = "none";
+            }
+            else{
+                tr[i].style.display = "";
+            }
+              
+          }
+        }
+        
+        function openModal(){
+            var modal = document.getElementById('myModal');
+            modal.style.display = "block";
+        }
+        
+        function closeModal(){
+            var modal = document.getElementById('myModal');
+            modal.style.display = "none";
+            photodiv = document.getElementById("modalphoto");
+        }
+        
+    </script>
+
+    
+    
+    <body>
+        
+        <!--<a href="index.html"><button class="btnat" style="margin-left: 6%; width: 28%">Home</button></a>
+        <a href="explore.html"><button class="btn" style="width: 28%">Explore</button></a>
+        <a href=""><button class="btn" style="margin-right: 6%; width: 28%">Profile</button></a>-->
+        
+        <div class="topnav">
+            <i class="fas fa-gem" style="border-right: solid 1px white; padding-right: 8px"></i>  Crystal
+            <span id="invis">
+                <span id="myphoto" height="60px;" style="float:right" onclick="openModal()"></span>
+                <span class="dropdown" style="padding-right: 10px">
+                    <a style="height:100px: padding-right:10px" class="dropbtn">
+                        <!--<span id="myphoto" height="60px" ></span>-->
+                        <!--<i style="bottom: 10px;" height="30px" class="fas fa-plus-circle"></i>-->
+                        <i style="bottom: 10px;" height="30px" class="fas fa-chevron-circle-down"></i>
+                    </a>
+                    <span id="myDropdown" class="dropdown-content">
+                        <a href="profile.html">Profile</a>
+                        <!--<a href="settings.html">Settings</a>-->
+                        <a href="about.html">About</a>
+                        <a id="signout" onclick="signout()">Sign Out</a>
+                    </span>
+                    <!--<a href="message.html"><i class="fas fa-plus-circle"></i></a>-->
+                </span>
+            </span>
+            <span style="float: right">
+                <!--<i class="fas fa-comment-dots"  style="float: right; height: 10px; cursor: pointer; padding: 10px; bottom: 10px; padding-right: 15px; font-size: 20;" onmouseover="makeCyan(i3)" onmouseout="makeWhite(i3)" id="i3" onclick="closeTwit()">  Chat</i>-->
+                
+                <a href="users.html" style="color: white; background-color: blue;" id="i2"><i class="fas fa-users"  style="float: right; height: 5px; cursor: pointer; padding-right: 10px; font-size: 20;" onmouseover="makeCyan(i2)" onmouseout="makeWhite(i2)" > Users</i></a>
+                
+                <a href="books.html" style="color: cyan; background-color: blue;"><i class="fas fa-book"  style="float: right; height: 5px; cursor: pointer; padding-right: 10px; font-size: 20;"id="i1"> Books</i></a>
+                
+                <a href="home.html" style="color: white; background-color: blue;"><i class="fas fa-home"  style="float: right; height: 5px; cursor: pointer; padding-right: 10px; font-size: 20;" onmouseover="makeCyan(i4)" onmouseout="makeWhite(i4)" id="i4"> Home</i></a>
+                
+                <a id="signin" onclick="signin()">Sign in</a>
+            </span>
+        </div>
+        
+        <div id="topsearch">
+            
+            <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for names..">
+            <!--<i class="fas fa-arrow-circle-up" style="float: right; font-size: 35; margin-top: 5px;"></i>-->
+            
+        </div>
+        
+        <br>
+        
+        <center><h1 style="font-family: 'Open Sans'; color: blue;" id="booktitle">Book Series</h1></center>
+        
+        <br>
+    
+        <div id="mybooks">
+        
+            <center>
+                <div class='loader'></div>
+                <br>
+                <h3>Loading Books...</h3>
+            </center>
+            
+        </div>
+        
+        <div id="bookdisplay" style="display:none"></div>
+        
+        <div id="myModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="closes" onclick="closeModal()">&times;</span>
+            <div id="modalphoto"></div>
+          </div>
+
+        </div>
+        
+        
+    </body>
+
+    
+
+    
+</html>

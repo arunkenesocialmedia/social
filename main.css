@@ -1,0 +1,24 @@
+.homebg {
+    height: 800px;
+    background-image: url(firebg.jpg);
+}
+
+.hometitle {
+    text-align: center;
+    padding: 15px;
+    transition: 0.5s;
+    cursor: pointer;
+    margin-top: 200px;
+    width: 500px;
+}
+
+.hometitle:hover {
+    /*transform: rotate(360deg);*/
+    background-color: white;
+}
+
+/*KEYFRAME ANIMATIONS*/
+
+
+
+/*-------------------*/

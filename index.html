@@ -1,0 +1,148 @@
+<html>
+    
+    <head>
+        
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        
+        <style>
+            
+            @media screen and (min-width: 601px) {
+                #logo {
+                    font-size: 100vx;
+                    height: 10%;
+                    color: white;
+                }
+                
+                body {
+                    background-image: url(firebg.jpg);
+                    background-size: 100% 100%;
+                    background-repeat: no-repeat;
+                    text-align: center;
+                }
+
+                #homediv {
+                    display: inline-block;
+                    background: rgba(80, 40, 255, 0.2); 
+                    width: 60%;
+                    height: 50%;
+                    margin-top: 8%;
+                }
+                
+                #logo {
+                    margin-top: 8%;
+                    font-size: 80;
+                    font-style: normal;
+                    font-family: "Helvetica Neue";
+                    color: white;
+                    cursor: pointer;
+                }
+                
+                #crystal {
+                    animation: dropDown 1s 1 ease-out;
+                    padding: 6px;
+                }
+                
+                @keyframes dropDown {
+                    0%  {transform: translateY(-400%)}
+                    100%  {transform: translateY(0px);}
+                }
+                
+                @keyframes bluify {
+                    0%  {background-color: transparent;}
+                    100%  {background-color: blue;}
+                }
+                
+                .btn {
+                    color: blue;
+                    background-color: white;
+                    border: solid 1px black;
+                    margin-top: 15px;
+                    width: 30%;
+                    height: 25%;
+                    margin-left: 10px;
+                    margin-right: 10px;
+                    border-radius: 8px;
+                    font-size: 50;
+                    transition: 0.7s;
+                    font-family: "Helvetica";
+                }
+                
+                .btn:hover {
+                    cursor: pointer;
+                    color: white;
+                    background-color: blue;
+                }
+
+            }
+            
+            @media screen and (max-width: 600px) {
+                #logo {
+                    font-size: 100vx;
+                    height: 10%;
+                    color: white;
+                }
+                
+                body {
+                    background-image: url(firebg.jpg);
+                    background-size: 100% 100%;
+                    background-repeat: no-repeat;
+                    text-align: center;
+                }
+
+                #homediv {
+                    display: inline-block;
+                    background: rgba(86, 86, 86, 0.2); 
+                    width: 60%;
+                    height: 70%;
+                    margin-top: 8%;
+                }
+
+                #logo {
+                    font-size: 80;
+                    color: white;
+                    cursor: pointer;
+                }
+                
+                .btn {
+                    color: blue;
+                    background-color: white;
+                    border: solid 1px black;
+                    margin-top: 15px;
+                    padding-left: 30px;
+                    padding-right: 30px;
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                    margin-left: 10px;
+                    margin-right: 10px;
+                    border-radius: 8px;
+                }
+                
+                .btn:hover {
+                    cursor: pointer;
+                    color: white;
+                    background-color: blue;
+                }
+
+            }
+            
+        </style>
+        
+    </head>
+    
+    <body>
+        
+        <div id="homediv">
+            
+            <div id="logo"><i class="fas fa-gem" id="crystal"> </i> <b style="border-left: solid 1px white; padding-left: 18px;">Crystal</b></div>
+            
+            <br><br><br><br><br><br>
+            
+            <center><a href="home.html"><button class="btn">Continue</button></a></center>
+            
+        </div>
+        
+    </body>
+    
+</html>
+
+

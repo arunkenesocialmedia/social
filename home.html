@@ -1,0 +1,877 @@
+<html>
+
+    <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    
+    <style>
+        
+        .loader {
+          border: 16px solid gray;
+          border-top: 16px solid blue;
+          border-radius: 50%;
+          width: 200px;
+          height: 200px;
+          animation: spin 2s ease-out infinite;
+        }
+        
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        
+        .avatar{
+            vertical-align: middle;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            filter: brightness(0.8);
+        }
+        
+        .avatar:hover{
+            filter: brightness(1);
+        }
+        
+        body{
+            -webkit-animation: bgcolor 30s infinite; 
+            animation: bgcolor 30s infinite;
+        }
+        
+        .icons{
+            color: white;
+            background-color: blue;
+            height: 30px;
+            cursor: pointer;
+        }
+        
+        
+        @-webkit-keyframes bgcolor {
+             0%  {background: #ffffff;}
+            20%  {background: #e5e5ff;}
+            40%  {background: #ccccff;}
+            60%  {background: #b2b2ff;}
+            80% {background: #ccccff;}
+            100% {background: #ffffff;}
+        }
+        @keyframes bgcolor {
+             0%  {background: #ffffff;}
+            20%  {background: #e5e5ff;}
+            40%  {background: #ccccff;}
+            60%  {background: #b2b2ff;}
+            80% {background: #ccccff;}
+            100% {background: #ffffff;}
+        }
+
+        #myphoto {
+            cursor: pointer;
+        }
+        
+        /* The Modal (background) */
+        .modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(0,0,0); /* Fallback color */
+          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+          background-color: #fefefe;
+          margin: 5% auto; /* 15% from the top and centered */
+          padding: 10px;
+          border: 1px solid #888;
+          width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .closes {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+        }
+
+        .closes:hover,
+        .closes:focus {
+          color: black;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        
+        #close{
+            padding: 8px 16px;
+            background-color: white;
+            color: black;
+            border: 3px solid black;
+            width: 200px;
+            align-self: center;
+            font-size: 15;
+        }
+        
+        #close:hover{
+            background-color: blue;
+            border: 3px solid blue;
+            color: white;
+            cursor: pointer;
+            font-size: 15;
+        }
+        
+        #twit{
+            width: 100%;
+            height: 400px;
+            border: 3px solid black;
+        }
+        
+        tr:hover {background-color: blue; color: white; cursor: pointer; box-shadow: 0 8px 8px 0 rgba(0,0,0,0.8);}
+        
+        table {
+            width: 100%;
+        }
+        
+        tr {
+            border: 3px solid blue;
+            width: 100%;
+        }
+        
+        th, td {
+            border: 1px solid blue;
+        }
+        
+        td{
+            padding: 10px;
+            text-align: center;
+        }
+        
+        th {
+            text-align: center;
+            padding: 20px;
+            font-size: 25;
+        }
+        
+        .tweet:hover{
+            background-color: lightgray;
+            cursor: pointer;
+        }
+        
+        .topnav {
+          overflow: hidden;
+          background-color: black;
+          border-bottom: 1px solid white;
+        }
+
+        .topnav a {
+          float: left;
+          color: #f2f2f2;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+          font-size: 17px;
+        }
+
+        .topnav a:hover {
+          background-color: white;
+          color: black;
+        }
+
+        .topnav a.active {
+          background-color: #0000ff;
+          color: white;
+        }
+        
+        .btnat {
+            background-color: blue;
+            font-family: Times New Roman;
+            border: 3px solid white;
+            color: black;
+            padding: 16px 32px;
+            text-align: center;
+            font-size: 25px;
+            transition: 0.2s;
+        }
+
+        .btn {
+            background-color: black;
+            font-family: Times New Roman;
+            border: 3px solid white;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            font-size: 25px;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background-color: white;
+            color: black;
+            cursor: pointer;
+        }
+        
+        #signout:hover {
+            cursor: pointer;
+        }
+        
+        .signbtn{
+            padding: 8px 16px;
+            background-color: white;
+            color: black;
+            border: 3px solid black;
+        }
+        
+        
+        .signbtn:hover{
+            padding: 8px 16px;
+            background-color: limegreen;
+            color: white;
+            border: 3px solid limegreen;
+            cursor: pointer;
+        }
+        
+        .submit {
+          padding: 8px 16px;
+            background-color: white;
+            color: black;
+            border: 3px solid black;
+        }
+        
+        .submit:hover {
+          padding: 8px 16px;
+            background-color: blue;
+            color: white;
+            border: 3px solid blue;
+            cursor: pointer;
+        }
+        
+        #inputFileToLoad{
+            margin-left: 10px;
+        }
+        
+        .topnav {
+            font-family: "Fredoka One";
+            overflow; hidden;
+            background-color:blue;
+            color: white;
+            font-size: 30px;
+            padding: 13px;
+        }
+        .topnav a {
+            color: white;
+            float: right;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+            font-family: "Fredoka One";
+            padding: 9px;
+            max-height: 20px;
+            z-index: 5;
+        }
+        .topnav a:hover {
+            background-color:white;
+            color: blue;
+        }
+        .topnav a.active {
+            background-color: white;
+            color: blue;
+        }
+        
+        /* Dropdown Button */
+        .dropbtn {
+            background-color: blue;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+
+        }
+
+        /* Dropdown button on hover & focus */
+        .dropbtn:hover, .dropbtn:focus {
+            background-color: blue;
+        }
+
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+            float: right;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 55px;
+            background-color: white;
+            min-width: 80px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.4);
+            z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: blue;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            float: none;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: blue;
+            color: white;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .modaltext{
+            font-size: 30;
+        }
+    
+    </style>
+    <script>
+        
+        
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDPVd7G8313nLPFN8vBribM8Sfma3Pac1o",
+            authDomain: "test-addbb.firebaseapp.com",
+            databaseURL: "https://test-addbb.firebaseio.com",
+            projectId: "test-addbb",
+            storageBucket: "test-addbb.appspot.com",
+            messagingSenderId: "267017042003"
+        };
+        firebase.initializeApp(config);
+                
+        // Check to see if you are logged in
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user == null) {
+                alert("Not logged in.");
+                
+                signinbutton = document.getElementById("signin");
+                signinbutton.style.visibility="visible";
+                
+                signoutbutton = document.getElementById("signout");
+                signoutbutton.style.visibility="hidden";
+                
+                return;
+                
+            } else {
+                userId = user.uid;
+                name = user.displayName;
+                imageUrl = user.photoURL;
+                email = user.email;
+                
+                signinbutton = document.getElementById("signin");
+                signinbutton.style.visibility="hidden";
+                
+                signoutbutton = document.getElementById("signout");
+                signoutbutton.style.visibility="visible";
+                    
+                // write user data to users
+                writeUserData(userId, name, email, imageUrl);
+                
+                myphotodiv = document.getElementById("invis");
+                myphotodiv.style.visibility="visible";
+                // write user data to users
+                myphotodiv = document.getElementById("myphoto");
+                myphotodiv.innerHTML = "<img id='profilepic' src='" + imageUrl + "'style='max-width:40px; max-height:40px; border-radius: 10px; display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
+                
+                photodiv = document.getElementById("modalphoto");
+                var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p></center>";
+                photodiv.innerHTML = modalcontent;
+
+                firebase.database().ref('/tweets').once('value').then(function(snapshot) {
+                    var data = (snapshot.val());
+                    if (data == null) {
+                      console.log("No data found at /tweets/" + userId);  
+                    } else {
+                        
+                      firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                        var userdata = (snapshot.val());
+                        if (userdata != null) {
+                           dataarray = [data,userdata]
+                           console.log(dataarray);
+                           updatetweets(dataarray);
+                           updateModal(dataarray);
+                        }
+                      });
+                      //console.log(data)
+                      //updatetweets(data);
+                    }
+                });
+            } // end user null check
+        }); // end check auth state
+        
+        function updateModal(data){
+            users = data[1];
+            data = data[0];
+            photodiv = document.getElementById("modalphoto");
+            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p></center>";
+            var yourUsername = "";
+            var yourPic = "";
+            var yourAge = "";
+            var yourBio = "";
+            var yourEmail = "";
+            var yourName = "";
+            var yourFav = "";
+            var yourRecent = "";
+            
+            var updated = false;
+            
+            for (var u in data) {
+                
+                if (users[u].userId = userId && !updated){
+                    
+                    updated = true;
+                    
+                    if (users[u].newName != null) {
+                        yourUsername = users[u].newName;
+                    } 
+                    else {
+                        yourUsername = users[u].username;
+                    }
+
+                    if (users[u].newPic != null) {
+                        yourPic = users[u].newPic;
+                    }
+                    else {
+                        yourPic = users[u].profile_picture;
+                    }
+
+                    if (users[u].email != null) {
+                        yourEmail = users[u].email;
+                    }
+
+                    if (users[u].bio != null) {
+                        yourBio = users[u].bio;
+                    }
+                    else{
+                        yourBio = "N/A"
+                    }
+
+                    if (users[u].age != null) {
+                        yourAge = users[u].age;
+                    }
+                    else{
+                        yourAge = "N/A"
+                    }
+
+                    if (users[u].book != null) {
+                        yourFav = users[u].book;
+                    }
+                    else{
+                        yourFav = "N/A"
+                    }
+
+                    if (users[u].recent != null) {
+                        yourRecent = users[u].recent;
+                    }
+                    else{
+                        yourRecent = "N/A"
+                    }
+                    
+                    modalcontent = modalcontent + "<center><p class='modaltext'>Username: " + yourUsername + "<br>Bio: " + yourBio + "<br>Age: " + yourAge + "<br>Favourite Book: " + yourFav + "<br>Most Recent Read: " + yourRecent + "</p></center>";
+                    photodiv.innerHTML = modalcontent;
+                    
+                }
+                
+            }
+            
+        }
+        
+        function encodeImageFileAsURL() {
+
+            var filesSelected = document.getElementById("inputFileToLoad").files;
+            if (filesSelected.length > 0) {
+                var fileToLoad = filesSelected[0];
+                var fileReader = new FileReader();
+                fileReader.onload = function(fileLoadedEvent) {
+                    var srcData = fileLoadedEvent.target.result; // <--- data: base64
+                    //var newImage = document.createElement('img');
+                    //newImage.src = srcData;
+                    //document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+                    document.getElementById("imgTest").innerHTML = srcData;
+                    //console.log("Converted Base64 version is: " + document.getElementById("imgTest").innerHTML);
+                    console.log(srcData);
+                }
+                fileReader.readAsDataURL(fileToLoad);
+            }
+        } // end function
+        
+        // write user data
+        function writeUserData(userId, name, email, imageUrl) {
+            firebase.database().ref('users/' + userId).update({
+                username: name,
+                email: email,
+                profile_picture : imageUrl,
+                userId: userId
+            });
+        }
+        
+        function updatetweets(data) {
+            //var mylist = "<ul>";
+            var mytab = "<table><tr><th>Photo</th><th>Username</th><th>Email</th><th>Tweet</th><th>Time Posted</th></tr>";
+            users = data[1]; // put on top, because changed data - not good coding change later
+            data = data[0];
+            var tweetsPresent = false;
+            
+            for (var u in data) {
+                for (var t in data[u]) {
+                    mytab = mytab + "<tr>";
+                    tweetsPresent = true;
+                    var date = new Date(data[u][t].time);
+                    var time = date.toString();
+                    if (data[u][t].img != "") {
+                        mytab = mytab + "<td width='25%'><img class='avatar' src='" + users[u].profile_picture + "' width='50px'></td>";
+                        var display;
+                        if (users[u].newName!=null){
+                            display = users[u].newName;
+                        }
+                        else{
+                            display = users[u].username;
+                        }
+                        mytab = mytab + "<td width='25%'>" + display + "</td>";
+                        mytab = mytab + "<td width='25%'>" + users[u].email + "</td>";
+                        mytab = mytab + "<td width='25%'>" + data[u][t].tweet + "<br><br><img src='" + data[u][t].img + "' width='50%'></td>";
+                        date2 = Date.now() - date;
+                        if (date2>=(525600*60000)){
+                            var timeAgo = Math.round(date2/(525600*60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                mytab = mytab + "<td width='25%'> 1 year ago </td>";
+                            }
+                            else{
+                                mytab = mytab + "<td width='25%'> " + timeAgo + " years ago </td>";
+                            }
+                        }
+                        else if (date2>=(43200*60000)){
+                            var timeAgo = Math.round(date2/(43200*60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                mytab = mytab + "<td width='25%'> 1 month ago </td>";
+                            }
+                            else{
+                                mytab = mytab + "<td width='25%'> " + timeAgo + " months ago </td>";
+                            }
+                        }
+                        else if (date2>=(1440*60000)){
+                            var timeAgo = Math.round(date2/(1440*60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                mytab = mytab + "<td width='25%'> 1 day ago </td>";
+                            }
+                            else{
+                                mytab = mytab + "<td width='25%'> " + timeAgo + " days ago </td>";
+                            }
+                        }
+                        else if (date2>=(60*60000)){
+                            var timeAgo = Math.round(date2/(60*60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                mytab = mytab + "<td width='25%'> 1 hour ago </td>";
+                            }
+                            else{
+                                mytab = mytab + "<td width='25%'> " + timeAgo + " hours ago </td>";
+                            }
+                        }
+                        else if (date2>=(60000)){
+                            var timeAgo = Math.round(date2/(60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                mytab = mytab + "<td width='25%'> 1 minute ago </td>";
+                            }
+                            else{
+                                mytab = mytab + "<td width='25%'> " + timeAgo + " minutes ago </td>";
+                            }
+                        }
+                        else{
+                            var timeAgo = Math.round(date2/(1000));
+                            if (timeAgo==0 || timeAgo==1){
+                                mytab = mytab + "<td width='25%'> 1 second ago </td>";
+                            }
+                            else{
+                                mytab = mytab + "<td width='25%'> " + timeAgo + " seconds ago </td>";
+                            }
+                        }
+                        //mytab = mytab + "<td>" + time + "<br><img src='" + data[u][t].img + "' width='300px'></td>";
+                    } else {
+                        mytab = mytab + "<td width='10%'><img class='avatar' src='" + users[u].profile_picture + "' width='50px'></td>";
+                        var display;
+                        if (users[u].newName!=null){
+                            display = users[u].newName;
+                        }
+                        else{
+                            display = users[u].username;
+                        }
+                        mytab = mytab + "<td width='25%'>" + display + "</td>";
+                        mytab = mytab + "<td width='25%'>" + users[u].email + "</td>";
+                        mytab = mytab + "<td width='25%'>" + data[u][t].tweet + "</td>";
+                        date2 = Date.now() - date;
+                        if (date2>=(525600*60000)){
+                            var timeAgo = Math.round(date2/(525600*60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                mytab = mytab + "<td  width='25%'> 1 year ago </td>";
+                            }
+                            else{
+                                mytab = mytab + "<td  width='25%'> " + timeAgo + " years ago </td>";
+                            }
+                        }
+                        else if (date2>=(43200*60000)){
+                            var timeAgo = Math.round(date2/(43200*60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                mytab = mytab + "<td width='25%'> 1 month ago </td>";
+                            }
+                            else{
+                                mytab = mytab + "<td width='25%'> " + timeAgo + " months ago </td>";
+                            }
+                        }
+                        else if (date2>=(1440*60000)){
+                            var timeAgo = Math.round(date2/(1440*60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                mytab = mytab + "<td width='25%'> 1 day ago </td>";
+                            }
+                            else{
+                                mytab = mytab + "<td width='25%'> " + timeAgo + " days ago </td>";
+                            }
+                        }
+                        else if (date2>=(60*60000)){
+                            var timeAgo = Math.round(date2/(60*60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                mytab = mytab + "<td width='25%'> 1 hour ago </td>";
+                            }
+                            else{
+                                mytab = mytab + "<td width='25%'> " + timeAgo + " hours ago </td>";
+                            }
+                        }
+                        else if (date2>=(60000)){
+                            var timeAgo = Math.round(date2/(60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                mytab = mytab + "<td width='25%'> 1 minute ago </td>";
+                            }
+                            else{
+                                mytab = mytab + "<td width='25%'> " + timeAgo + " minutes ago </td>";
+                            }
+                        }
+                        else{
+                            var timeAgo = Math.round(date2/(1000));
+                            if (timeAgo==0 || timeAgo==1){
+                                mytab = mytab + "<td width='25%'> 1 second ago </td>";
+                            }
+                            else{
+                                mytab = mytab + "<td width='25%'> " + timeAgo + " seconds ago </td>";
+                            }
+                        }
+                        
+                    } 
+                    mytab = mytab + "</tr>";
+                }   
+            }
+            //mylist = mylist + "</ul>";
+            mytab = mytab + "</table>"
+            var mytdiv = document.getElementById("mytweets");
+            if (!tweetsPresent){
+                mytdiv.innerHTML = "No Tweets yet";
+            }
+            //mytdiv.innerHTML = mylist;
+            mytdiv.innerHTML = mytab;
+        }
+        
+        // write tweets to firebase
+        function tweet() {
+            
+            var twitdoc = document.getElementById("twit");
+            var twitimg = document.getElementById("imgTest");
+            var nameValue = twitdoc.value;
+            var imgValue = twitimg.innerHTML;
+            var js_time = Date.now();
+            
+            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue});
+            twitdoc.value = "";
+            console.log("tweet written")
+            
+            firebase.database().ref('/tweets').once('value').then(function(snapshot) {
+                    var data = (snapshot.val());
+                    if (data == null) {
+                      console.log("No data found at /tweets/" + userId);  
+                    } else { 
+                        firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                        var userdata = (snapshot.val());
+                        if (userdata != null) {
+                           dataarray = [data,userdata]
+                           console.log(dataarray)
+                           updatetweets(dataarray); 
+                        }
+                      });
+                    }
+                });
+            
+            
+            
+            // The unique key stored in tweetid is based on a timestamp, so list items will automatically be ordered chronologically. Because Firebase generates a unique key for each tweet, no write conflicts will occur if multiple users add a post at the same time. https://firebase.google.com/docs/database/admin/save-data
+            
+        }
+        
+        function signin() {
+            console.log("Signing in");
+            var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithRedirect(provider).then(function(result) { 
+                window.location.replace("fbtest.html");
+            });
+        }
+        
+        function signout() {
+            console.log("Signing out");
+            firebase.auth().signOut().then(function() {
+            });
+        }
+        
+        function openProfile(){
+            closebtn = document.getElementById("closebtn");
+            closebtn.innerHTML = "<button id='close' onclick='closeProfile()'>- - -  Collapse  - - -</button>";
+            tweets = document.getElementById("mytweets");
+            tweets.style.display = "block";
+        }
+        
+        function closeProfile(){
+            closebtn = document.getElementById("closebtn");
+            closebtn.innerHTML = "<button id='close' onclick='openProfile()'>+ + +  Expand  + + +</button>";
+            tweets = document.getElementById("mytweets");
+            tweets.style.display = "none";
+        }
+        
+        function openModal(){
+            var modal = document.getElementById('myModal');
+            modal.style.display = "block";
+        }
+        
+        function closeModal(){
+            var modal = document.getElementById('myModal');
+            modal.style.display = "none";
+            photodiv = document.getElementById("modalphoto");
+        }
+        
+        function closeTwit(){
+            var twit = document.getElementById('formarea');
+            if (twit.style.display=="none"){
+                twit.style.display = "block";
+            }
+            else{
+                twit.style.display = "none";
+            }
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          var modal = document.getElementById('myModal');
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+        
+        function openUser(uName, uEmail, uPic){
+            var modal = document.getElementById('myModal');
+            modal.style.display = "block";
+            photodiv = document.getElementById("modalphoto");
+            var modalcontent = "<center><p class='modaltext'>" + uName + "</p><img id='profilepic' src='" + uPic + "'style='max-height:300px; border-radius: 10px'></center>";
+            photodiv.innerHTML = modalcontent;
+        }
+        
+        function makeCyan(str){
+            var k = document.getElementById(str);
+            str.style.color = "cyan";
+        }
+        
+        function makeWhite(str){
+            var k = document.getElementById(str);
+            str.style.color = "white";
+        }
+    
+    </script>
+
+    <body>
+        
+        <!--<a href="index.html"><button class="btnat" style="margin-left: 6%; width: 28%">Home</button></a>
+        <a href="explore.html"><button class="btn" style="width: 28%">Explore</button></a>
+        <a href=""><button class="btn" style="margin-right: 6%; width: 28%">Profile</button></a>-->
+        
+        
+        <div class="topnav">
+            <i class="fas fa-gem" style="border-right: solid 1px white; padding-right: 8px"></i>  Crystal
+            <span id="invis">
+                <span id="myphoto" height="60px;" style="float:right" onclick="openModal()"></span>
+                <span class="dropdown" style="padding-right: 10px">
+                    <a style="height:100px: padding-right:10px" class="dropbtn">
+                        <!--<span id="myphoto" height="60px" ></span>-->
+                        <!--<i style="bottom: 10px;" height="30px" class="fas fa-plus-circle"></i>-->
+                        <i style="bottom: 10px;" height="30px" class="fas fa-chevron-circle-down"></i>
+                    </a>
+                    <span id="myDropdown" class="dropdown-content">
+                        <a href="profile.html">Profile</a>
+                        <!--<a href="settings.html">Settings</a>-->
+                        <a href="about.html">About</a>
+                        <a id="signout" onclick="signout()">Sign Out</a>
+                    </span>
+                    <!--<a href="message.html"><i class="fas fa-plus-circle"></i></a>-->
+                </span>
+            </span>
+            <span style="float: right">
+                <i class="fas fa-comment-dots"  style="float: right; height: 10px; cursor: pointer; padding: 10px; bottom: 10px; padding-right: 15px; font-size: 20;" onmouseover="makeCyan(i3)" onmouseout="makeWhite(i3)" id="i3" onclick="closeTwit()">  Chat</i>
+                
+                <a href="users.html" style="color: white; background-color: blue;" onmouseover="makeCyan(i2)" onmouseout="makeWhite(i2)" id="i2"><i class="fas fa-users"  style="float: right; height: 5px; cursor: pointer; padding-right: 10px; font-size: 20;"> Users</i></a>
+                
+                <a href="books.html" style="color: white; background-color: blue;"><i class="fas fa-book"  style="float: right; height: 5px; cursor: pointer; padding-right: 10px; font-size: 20;" onmouseover="makeCyan(i1)" onmouseout="makeWhite(i1)" id="i1"> Books</i></a>
+                
+                <a href="home.html" style="color: cyan; background-color: blue;"><i class="fas fa-home"  style="float: right; height: 5px; cursor: pointer; padding-right: 10px; font-size: 20;" id="i4"> Home</i></a>
+                
+                <a id="signin" onclick="signin()">Sign in</a>
+            </span>
+        </div>
+        
+        <!--<button class="signbtn" id="signin" onclick="signin()">Sign in</button>
+        <button class="signbtn" id="signout" onclick="signout()">Sign out</button>-->
+        <center><div id="formarea" width="100px" style="background-color: blue; padding: 10px; display: none">
+            
+            <form>
+                <!--Tweet:<br>-->
+                <textarea id="twit" type="text" name="thetweet" cols="100" rows="4"></textarea>
+            </form>
+        
+            <button class="submit" type="button" onclick="tweet()">Submit</button>
+            <input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
+            
+        </div></center>
+        <div id="imgTest" style="display:none;"></div>
+        <div id="mytweets" width="800px" style="border: solid 5px blue;">
+            <center>
+                <div class='loader'></div>
+                <br>
+                <h3>Loading Chat...</h3>
+            </center>
+        </div>
+        <br>
+        <center><div id="closebtn"><br><button id="close" onclick='closeProfile()'>- - -  Collapse  - - -</button></div></center>
+        <br>
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="closes" onclick="closeModal()">&times;</span>
+            <div id="modalphoto"></div>
+          </div>
+
+        </div>
+        
+        
+    </body>
+
+    
+
+    
+</html>
