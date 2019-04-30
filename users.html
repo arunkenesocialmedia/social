@@ -444,7 +444,7 @@
                            console.log(dataarray)
                            //updatetweets(dataarray); 
                             showUsers(dataarray, userId);
-                            updateModal(dataarray);
+                            updateModal(dataarray, userId);
                         }
                       //console.log(data)
                       //updatetweets(data);
@@ -681,7 +681,7 @@
             str.style.color = "white";
         }
         
-        function updateModal(data){
+        function updateModal(data, usersId){
             users = data[1];
             data = data[0];
             photodiv = document.getElementById("modalphoto");
@@ -699,7 +699,7 @@
             
             for (var u in data) {
                 
-                if (users[u].userId = userId && !updated){
+                if (users[u].userId = usersId && !updated){
                     
                     updated = true;
                     
