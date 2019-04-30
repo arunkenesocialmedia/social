@@ -132,7 +132,8 @@
         tr:hover {background-color: blue; color: white; cursor: pointer; box-shadow: 0 8px 8px 0 rgba(0,0,0,0.8);}
         
         table {
-            width: 100%;
+            width: 80%;
+            border: solid 3px blue;
         }
         
         tr {
@@ -244,7 +245,7 @@
           padding: 8px 16px;
             background-color: blue;
             color: white;
-            border: 3px solid blue;
+            border: 3px solid black;
             cursor: pointer;
         }
         
@@ -387,7 +388,7 @@
                 myphotodiv.innerHTML = "<img id='profilepic' src='" + imageUrl + "'style='max-width:40px; max-height:40px; border-radius: 10px; display:inline-block; padding-bottom: 0px; z-index:-1;'/>";
                 
                 photodiv = document.getElementById("modalphoto");
-                var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p></center>";
+                var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p><a href='profile.html'><button class='edit'>Edit Profile</button></a></center>";
                 photodiv.innerHTML = modalcontent;
 
                 firebase.database().ref('/tweets').once('value').then(function(snapshot) {
@@ -416,7 +417,7 @@
             users = data[1];
             data = data[0];
             photodiv = document.getElementById("modalphoto");
-            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p></center>";
+            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p><a href='profile.html'><button class='edit'>Edit Profile</button></a></center>";
             var yourUsername = "";
             var yourPic = "";
             var yourAge = "";
@@ -520,159 +521,229 @@
         
         function updatetweets(data) {
             //var mylist = "<ul>";
-            var mytab = "<table><tr><th>Photo</th><th>Username</th><th>Email</th><th>Tweet</th><th>Time Posted</th></tr>";
+            var mytab = "<center><table><tr><th>Photo</th><th>Username</th><th>Message</th><th>Time Posted</th></tr>";
             users = data[1]; // put on top, because changed data - not good coding change later
             data = data[0];
             var tweetsPresent = false;
             
             for (var u in data) {
                 for (var t in data[u]) {
-                    mytab = mytab + "<tr>";
-                    tweetsPresent = true;
-                    var date = new Date(data[u][t].time);
-                    var time = date.toString();
-                    if (data[u][t].img != "") {
-                        mytab = mytab + "<td width='25%'><img class='avatar' src='" + users[u].profile_picture + "' width='50px'></td>";
-                        var display;
-                        if (users[u].newName!=null){
-                            display = users[u].newName;
-                        }
-                        else{
-                            display = users[u].username;
-                        }
-                        mytab = mytab + "<td width='25%'>" + display + "</td>";
-                        mytab = mytab + "<td width='25%'>" + users[u].email + "</td>";
-                        mytab = mytab + "<td width='25%'>" + data[u][t].tweet + "<br><br><img src='" + data[u][t].img + "' width='50%'></td>";
-                        date2 = Date.now() - date;
-                        if (date2>=(525600*60000)){
-                            var timeAgo = Math.round(date2/(525600*60000));
-                            if (timeAgo==0 || timeAgo==1){
-                                mytab = mytab + "<td width='25%'> 1 year ago </td>";
+                    if (data[u][t].tag==null || data[u][t].tag==""){
+                        mytab = mytab + "<tr>";
+                        tweetsPresent = true;
+                        var date = new Date(data[u][t].time);
+                        var time = date.toString();
+                        if (data[u][t].img != "") {
+                            mytab = mytab + "<td width='10%'><img class='avatar' src='" + users[u].profile_picture + "' width='50px'></td>";
+                            var display;
+                            if (users[u].newName!=null){
+                                display = users[u].newName;
                             }
                             else{
-                                mytab = mytab + "<td width='25%'> " + timeAgo + " years ago </td>";
+                                display = users[u].username;
                             }
-                        }
-                        else if (date2>=(43200*60000)){
-                            var timeAgo = Math.round(date2/(43200*60000));
-                            if (timeAgo==0 || timeAgo==1){
-                                mytab = mytab + "<td width='25%'> 1 month ago </td>";
+                            mytab = mytab + "<td width='25%'>" + display + "<br>(" + users[u].email + ")</td>";
+                            mytab = mytab + "<td width='45%'>" + data[u][t].tweet + "<br><br><img src='" + data[u][t].img + "' width='50%'></td>";
+                            date2 = Date.now() - date;
+                            if (date2>=(525600*60000)){
+                                var timeAgo = Math.round(date2/(525600*60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 year ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " years ago </td>";
+                                }
                             }
-                            else{
-                                mytab = mytab + "<td width='25%'> " + timeAgo + " months ago </td>";
+                            else if (date2>=(43200*60000)){
+                                var timeAgo = Math.round(date2/(43200*60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 month ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " months ago </td>";
+                                }
                             }
-                        }
-                        else if (date2>=(1440*60000)){
-                            var timeAgo = Math.round(date2/(1440*60000));
-                            if (timeAgo==0 || timeAgo==1){
-                                mytab = mytab + "<td width='25%'> 1 day ago </td>";
+                            else if (date2>=(1440*60000)){
+                                var timeAgo = Math.round(date2/(1440*60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 day ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " days ago </td>";
+                                }
                             }
-                            else{
-                                mytab = mytab + "<td width='25%'> " + timeAgo + " days ago </td>";
+                            else if (date2>=(60*60000)){
+                                var timeAgo = Math.round(date2/(60*60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 hour ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " hours ago </td>";
+                                }
                             }
-                        }
-                        else if (date2>=(60*60000)){
-                            var timeAgo = Math.round(date2/(60*60000));
-                            if (timeAgo==0 || timeAgo==1){
-                                mytab = mytab + "<td width='25%'> 1 hour ago </td>";
-                            }
-                            else{
-                                mytab = mytab + "<td width='25%'> " + timeAgo + " hours ago </td>";
-                            }
-                        }
-                        else if (date2>=(60000)){
-                            var timeAgo = Math.round(date2/(60000));
-                            if (timeAgo==0 || timeAgo==1){
-                                mytab = mytab + "<td width='25%'> 1 minute ago </td>";
-                            }
-                            else{
-                                mytab = mytab + "<td width='25%'> " + timeAgo + " minutes ago </td>";
-                            }
-                        }
-                        else{
-                            var timeAgo = Math.round(date2/(1000));
-                            if (timeAgo==0 || timeAgo==1){
-                                mytab = mytab + "<td width='25%'> 1 second ago </td>";
-                            }
-                            else{
-                                mytab = mytab + "<td width='25%'> " + timeAgo + " seconds ago </td>";
-                            }
-                        }
-                        //mytab = mytab + "<td>" + time + "<br><img src='" + data[u][t].img + "' width='300px'></td>";
-                    } else {
-                        mytab = mytab + "<td width='10%'><img class='avatar' src='" + users[u].profile_picture + "' width='50px'></td>";
-                        var display;
-                        if (users[u].newName!=null){
-                            display = users[u].newName;
-                        }
-                        else{
-                            display = users[u].username;
-                        }
-                        mytab = mytab + "<td width='25%'>" + display + "</td>";
-                        mytab = mytab + "<td width='25%'>" + users[u].email + "</td>";
-                        mytab = mytab + "<td width='25%'>" + data[u][t].tweet + "</td>";
-                        date2 = Date.now() - date;
-                        if (date2>=(525600*60000)){
-                            var timeAgo = Math.round(date2/(525600*60000));
-                            if (timeAgo==0 || timeAgo==1){
-                                mytab = mytab + "<td  width='25%'> 1 year ago </td>";
+                            else if (date2>=(60000)){
+                                var timeAgo = Math.round(date2/(60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 minute ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " minutes ago </td>";
+                                }
                             }
                             else{
-                                mytab = mytab + "<td  width='25%'> " + timeAgo + " years ago </td>";
+                                var timeAgo = Math.round(date2/(1000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 second ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " seconds ago </td>";
+                                }
                             }
-                        }
-                        else if (date2>=(43200*60000)){
-                            var timeAgo = Math.round(date2/(43200*60000));
-                            if (timeAgo==0 || timeAgo==1){
-                                mytab = mytab + "<td width='25%'> 1 month ago </td>";
-                            }
-                            else{
-                                mytab = mytab + "<td width='25%'> " + timeAgo + " months ago </td>";
-                            }
-                        }
-                        else if (date2>=(1440*60000)){
-                            var timeAgo = Math.round(date2/(1440*60000));
-                            if (timeAgo==0 || timeAgo==1){
-                                mytab = mytab + "<td width='25%'> 1 day ago </td>";
-                            }
-                            else{
-                                mytab = mytab + "<td width='25%'> " + timeAgo + " days ago </td>";
-                            }
-                        }
-                        else if (date2>=(60*60000)){
-                            var timeAgo = Math.round(date2/(60*60000));
-                            if (timeAgo==0 || timeAgo==1){
-                                mytab = mytab + "<td width='25%'> 1 hour ago </td>";
+                            //mytab = mytab + "<td>" + time + "<br><img src='" + data[u][t].img + "' width='300px'></td>";
+                        } 
+                        
+                        else if (data[u][t].vid!="" && data[u][t].vid!=null){
+                            mytab = mytab + "<td width='10%'><img class='avatar' src='" + users[u].profile_picture + "' width='50px'></td>";
+                            var display;
+                            if (users[u].newName!=null){
+                                display = users[u].newName;
                             }
                             else{
-                                mytab = mytab + "<td width='25%'> " + timeAgo + " hours ago </td>";
+                                display = users[u].username;
                             }
-                        }
-                        else if (date2>=(60000)){
-                            var timeAgo = Math.round(date2/(60000));
-                            if (timeAgo==0 || timeAgo==1){
-                                mytab = mytab + "<td width='25%'> 1 minute ago </td>";
+                            mytab = mytab + "<td width='25%'>" + display + "<br>(" + users[u].email + ")</td>";
+                            mytab = mytab + "<td width='45%'>" + data[u][t].tweet + "<br><br><iframe src='" + data[u][t].vid + "' width='70%'></iframe></td>";
+                            date2 = Date.now() - date;
+                            if (date2>=(525600*60000)){
+                                var timeAgo = Math.round(date2/(525600*60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 year ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " years ago </td>";
+                                }
+                            }
+                            else if (date2>=(43200*60000)){
+                                var timeAgo = Math.round(date2/(43200*60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 month ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " months ago </td>";
+                                }
+                            }
+                            else if (date2>=(1440*60000)){
+                                var timeAgo = Math.round(date2/(1440*60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 day ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " days ago </td>";
+                                }
+                            }
+                            else if (date2>=(60*60000)){
+                                var timeAgo = Math.round(date2/(60*60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 hour ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " hours ago </td>";
+                                }
+                            }
+                            else if (date2>=(60000)){
+                                var timeAgo = Math.round(date2/(60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 minute ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " minutes ago </td>";
+                                }
                             }
                             else{
-                                mytab = mytab + "<td width='25%'> " + timeAgo + " minutes ago </td>";
-                            }
-                        }
-                        else{
-                            var timeAgo = Math.round(date2/(1000));
-                            if (timeAgo==0 || timeAgo==1){
-                                mytab = mytab + "<td width='25%'> 1 second ago </td>";
-                            }
-                            else{
-                                mytab = mytab + "<td width='25%'> " + timeAgo + " seconds ago </td>";
+                                var timeAgo = Math.round(date2/(1000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 second ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " seconds ago </td>";
+                                }
                             }
                         }
                         
-                    } 
-                    mytab = mytab + "</tr>";
+                        else {
+                            mytab = mytab + "<td width='10%'><img class='avatar' src='" + users[u].profile_picture + "' width='50px'></td>";
+                            var display;
+                            if (users[u].newName!=null){
+                                display = users[u].newName;
+                            }
+                            else{
+                                display = users[u].username;
+                            }
+                            mytab = mytab + "<td width='25%'>" + display + "<br>(" + users[u].email + ")</td>";
+                            mytab = mytab + "<td width='45%'>" + data[u][t].tweet + "</td>";
+                            date2 = Date.now() - date;
+                            if (date2>=(525600*60000)){
+                                var timeAgo = Math.round(date2/(525600*60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td  width='25%'> 1 year ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td  width='25%'> " + timeAgo + " years ago </td>";
+                                }
+                            }
+                            else if (date2>=(43200*60000)){
+                                var timeAgo = Math.round(date2/(43200*60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 month ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " months ago </td>";
+                                }
+                            }
+                            else if (date2>=(1440*60000)){
+                                var timeAgo = Math.round(date2/(1440*60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 day ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " days ago </td>";
+                                }
+                            }
+                            else if (date2>=(60*60000)){
+                                var timeAgo = Math.round(date2/(60*60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 hour ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " hours ago </td>";
+                                }
+                            }
+                            else if (date2>=(60000)){
+                                var timeAgo = Math.round(date2/(60000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 minute ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " minutes ago </td>";
+                                }
+                            }
+                            else{
+                                var timeAgo = Math.round(date2/(1000));
+                                if (timeAgo==0 || timeAgo==1){
+                                    mytab = mytab + "<td width='25%'> 1 second ago </td>";
+                                }
+                                else{
+                                    mytab = mytab + "<td width='25%'> " + timeAgo + " seconds ago </td>";
+                                }
+                            }
+
+                        } 
+                        mytab = mytab + "</tr>";
+                    }
                 }   
             }
             //mylist = mylist + "</ul>";
-            mytab = mytab + "</table>"
+            mytab = mytab + "</table></center>"
             var mytdiv = document.getElementById("mytweets");
             if (!tweetsPresent){
                 mytdiv.innerHTML = "No Tweets yet";
@@ -686,15 +757,31 @@
             
             var twitdoc = document.getElementById("twit");
             var twitimg = document.getElementById("imgTest");
+            var twitvid = document.getElementById("videoupload");
             var nameValue = twitdoc.value;
             var imgValue = twitimg.innerHTML;
-            var js_time = Date.now();
+            var vidValue = twitvid.value;
             
-            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue});
-            twitdoc.value = "";
-            console.log("tweet written")
-            
-            firebase.database().ref('/tweets').once('value').then(function(snapshot) {
+            if (nameValue.length<1){
+                alert("No Message Inputted");
+            }
+            else if (nameValue.length>400){
+                alert("Message is Too Long");
+            }
+            else if (imgValue!="" && vidValue!=""){
+                alert("Cannot Upload Video and Image"); 
+            }
+            else{
+                alert("Shared");
+                var myChat = document.getElementById("myChat");
+                myChat.style.display = "none";
+                var js_time = Date.now();
+                var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, vid: vidValue});
+                twitdoc.value = "";
+                twitvid.value = "";
+                console.log("tweet written")
+
+                firebase.database().ref('/tweets').once('value').then(function(snapshot) {
                     var data = (snapshot.val());
                     if (data == null) {
                       console.log("No data found at /tweets/" + userId);  
@@ -709,6 +796,9 @@
                       });
                     }
                 });
+            }
+            
+            
             
             
             
@@ -735,6 +825,7 @@
             closebtn.innerHTML = "<button id='close' onclick='closeProfile()'>- - -  Collapse  - - -</button>";
             tweets = document.getElementById("mytweets");
             tweets.style.display = "block";
+            document.getElementById("gem").style.display = "none";
         }
         
         function closeProfile(){
@@ -742,6 +833,7 @@
             closebtn.innerHTML = "<button id='close' onclick='openProfile()'>+ + +  Expand  + + +</button>";
             tweets = document.getElementById("mytweets");
             tweets.style.display = "none";
+            document.getElementById("gem").style.display = "block";
         }
         
         function openModal(){
@@ -756,7 +848,7 @@
         }
         
         function closeTwit(){
-            var twit = document.getElementById('formarea');
+            var twit = document.getElementById('myChat');
             if (twit.style.display=="none"){
                 twit.style.display = "block";
             }
@@ -834,19 +926,23 @@
         
         <!--<button class="signbtn" id="signin" onclick="signin()">Sign in</button>
         <button class="signbtn" id="signout" onclick="signout()">Sign out</button>-->
-        <center><div id="formarea" width="100px" style="background-color: blue; padding: 10px; display: none">
+        <!--<center><div id="myChat" width="100px" style="background-color: blue; padding: 10px; display: none">
             
             <form>
-                <!--Tweet:<br>-->
                 <textarea id="twit" type="text" name="thetweet" cols="100" rows="4"></textarea>
             </form>
         
             <button class="submit" type="button" onclick="tweet()">Submit</button>
             <input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
             
-        </div></center>
+        </div></center>-->
+        
         <div id="imgTest" style="display:none;"></div>
-        <div id="mytweets" width="800px" style="border: solid 5px blue;">
+        
+        <h1 style='color:blue; text-align: center'>Open Chat</h1><br>
+        <center><i class="fas fa-gem" style="padding-right: 8px; color: blue; font-size: 90; display: none" id="gem"></i></center>
+        
+        <div id="mytweets" width="80%">
             <center>
                 <div class='loader'></div>
                 <br>
@@ -864,6 +960,28 @@
           <div class="modal-content">
             <span class="closes" onclick="closeModal()">&times;</span>
             <div id="modalphoto"></div>
+          </div>
+
+        </div>
+        
+        <div id="myChat" class="modal" style="display: none;">
+
+          <!-- Modal content -->
+          <div class="modal-content" style="background-color: blue; padding: 30px; border-radius: 30px">
+              <span class="closes" style='margin-right: 10px' onclick="closeTwit()">&times;</span>
+              <br>
+              <center><div id="formarea" width="100px">
+                
+                <h2 style="color: white">Upload a Message</h2>
+                <form>
+                    <textarea id="twit" style="border-radius: 10px;" type="text" name="thetweet" cols="100" rows="4"></textarea>
+                </form>
+
+                <button class="submit" type="button" onclick="tweet()" style="float: right; border-radius: 5px; margin-right: 5px; font-size: 20">Share</button>
+                <input style="margin-top: 10px" id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
+                <input style="margin-top: 10px; padding: 8px; border: solid 2px black" width="300px" id="videoupload" type="text" placeholder="Enter Video Link..." />
+            
+              </div></center>
           </div>
 
         </div>
