@@ -132,6 +132,19 @@
         
         <script>
             
+            var isMobile = false;
+            
+            if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                //alert("yay");
+                isMobile=true;
+                document.getElementById("homediv").style.width = 70%;
+                 document.getElementsByClassName("btn").style.width = 20%;
+            }
+            else{
+                isMobile=false;
+                //alert("no");
+            }
+            
             var config = {
                 apiKey: "AIzaSyDPVd7G8313nLPFN8vBribM8Sfma3Pac1o",
                 authDomain: "test-addbb.firebaseapp.com",
