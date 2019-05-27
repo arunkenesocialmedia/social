@@ -633,7 +633,7 @@
             
             for (var u in data) {
                 
-                if (users[u].username = name && !updated){
+                if (users[u].username == name && !updated){
                     
                     modalcontent = modalcontent + "<p class='modaltext'>Title: " + users[u].title + "<br>Points: " + users[u].points + "</p><a href='profile.html'><button class='edit'>Edit Profile</button></a></center>";
                     
@@ -748,7 +748,7 @@
                                     var userID = users[u].userId;
 
                                     for (var u2 in users[userId].friends) {
-                                        if (users[userId].friends[u2].uName == users[u].username) {
+                                        if (users[userId].friends[u2].uName == users[u].username || users[u].username == name) {
                                             followingUser = true;
                                         }
                                     }
@@ -1348,7 +1348,6 @@
                 var data = (snapshot.val());
                 if (data!=null){
                     for (var l in data){
-                        alert("Liked Previously by " + data[l].userName);
                         if (data[l].userName == name){
                             liked = true;
                         }
