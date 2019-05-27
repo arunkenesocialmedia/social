@@ -426,6 +426,15 @@
     </style>
     <script>
         
+        if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            //alert("yay");
+            isMobile=true;
+        }
+        else{
+            isMobile=false;
+            //alert("no");
+        }
+        
         // Initialize Firebase
         var config = {
             apiKey: "AIzaSyDPVd7G8313nLPFN8vBribM8Sfma3Pac1o",
@@ -631,17 +640,24 @@
                                 yourPoints = "0"
                             }
                             
-                            userprof = document.getElementById("prof");
-                            var p = "<center><img height='20%' src='" + yourPic + "'><br><h2>" + yourName + "</h2><h3>Title: " + yourTitle + "</h3><h3>Points: " + yourPoints + "</h3></center>";
-                            userprof.innerHTML = p;
-                            
-                            lprof = document.getElementById("left");
-                            var l = "<h3 style='margin-left: 30px;'>Email: " + yourEmail + "</h3><h3 style='margin-left: 30px;'>Age: " + yourAge + "</h3><h3 style='margin-left: 30px;'>Bio: " + yourBio + "</h3>";
-                            lprof.innerHTML = l; 
-                            
-                            rprof = document.getElementById("right");
-                            var r = "<h3 style='margin-left: 30px;'>Username: " + yourUsername + "</h3><h3 style='margin-left: 30px;'>Favorite Book: " + yourFav + "</h3><h3 style='margin-left: 30px;'>Most Recent Book: " + yourRecent + "</h3>";
-                            rprof.innerHTML = r; 
+                            if (isMobile){
+                                userprof = document.getElementById("prof");
+                                var p = "<center><img height='20%' src='" + yourPic + "'><br><h2>" + yourName + "</h2><h3>Title: " + yourTitle + "</h3><h3>Points: " + yourPoints + "</h3><h3>Email: " + yourEmail + "</h3><h3>Age: " + yourAge + "</h3><h3>Bio: " + yourBio + "</h3><h3>Username: " + yourUsername + "</h3><h3>Favorite Book: " + yourFav + "</h3><h3>Most Recent Book: " + yourRecent + "</h3></center>";
+                                userprof.innerHTML = p;
+                            }
+                            else{
+                                userprof = document.getElementById("prof");
+                                var p = "<center><img height='20%' src='" + yourPic + "'><br><h2>" + yourName + "</h2><h3>Title: " + yourTitle + "</h3><h3>Points: " + yourPoints + "</h3></center>";
+                                userprof.innerHTML = p;
+
+                                lprof = document.getElementById("left");
+                                var l = "<h3 style='margin-left: 30px;'>Email: " + yourEmail + "</h3><h3 style='margin-left: 30px;'>Age: " + yourAge + "</h3><h3 style='margin-left: 30px;'>Bio: " + yourBio + "</h3>";
+                                lprof.innerHTML = l; 
+
+                                rprof = document.getElementById("right");
+                                var r = "<h3 style='margin-left: 30px;'>Username: " + yourUsername + "</h3><h3 style='margin-left: 30px;'>Favorite Book: " + yourFav + "</h3><h3 style='margin-left: 30px;'>Most Recent Book: " + yourRecent + "</h3>";
+                                rprof.innerHTML = r; 
+                            }
                             
                             
                             bprof = document.getElementById("bottom");
