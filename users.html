@@ -9,6 +9,23 @@
     
     <style>
         
+        .edit{
+            border: solid 2px blue;
+            color: blue;
+            border-radius: 15px;
+            padding-right: 15px;
+            padding-left: 15px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            font-size: 15;
+            transition: 0.3s ease-out;
+        }
+        .edit:hover{
+            color: white;
+            background-color: blue;
+            cursor: pointer;
+        }
+        
         .loader {
           border: 16px solid gray;
           border-top: 16px solid blue;
@@ -125,6 +142,9 @@
           padding: 10px;
           border: 1px solid #888;
           width: 80%; /* Could be more or less, depending on screen size */
+          border: solid 5px blue;
+          border-radius: 30px;
+          padding: 30px;
         }
 
         /* The Close Button */
@@ -190,19 +210,24 @@
             background-color: lightgray;
             cursor: pointer;
         }
+        
         .topnav {
+          width: 98%;
+          top: 0;
+          z-index: 10;
           overflow: hidden;
           background-color: black;
           border-bottom: 1px solid white;
+            padding: 10px;
+            max-height: 40px;
         }
 
         .topnav a {
-          float: left;
           color: #f2f2f2;
           text-align: center;
-          padding: 14px 16px;
           text-decoration: none;
           font-size: 17px;
+          z-index: 20;
         }
 
         .topnav a:hover {
@@ -444,7 +469,7 @@
                            console.log(dataarray)
                            //updatetweets(dataarray); 
                             showUsers(dataarray, userId);
-                            updateModal(dataarray, userId);
+                            updateModal(dataarray);
                         }
                       //console.log(data)
                       //updatetweets(data);
@@ -490,11 +515,50 @@
             users = data[1]; // put on top, because changed data - not good coding change later
             data = data[0];
             var c = 0;
+            var isFriend;
+            //alert(uID);
             
             for (var u in users) {
                 c = c+1;
                 mytab = mytab + "<tr>";
-                mytab = mytab + "<td><center><img class='avatar' src='" + users[u].profile_picture + "' width='60px'></center></td>";
+                
+                var uAge, uRecent, uFavorite, uPoints, uBio;
+                if (users[u].age==null){
+                    firebase.database().ref('users/' + users[u].userId + "/").update({age: "N/A"});
+                    uAge = "N/A";
+                }
+                else{
+                    uAge = users[u].age;
+                }
+                if (users[u].bio==null){
+                    firebase.database().ref('users/' + users[u].userId + "/").update({bio: "N/A"});
+                    uBio = "N/A";
+                }
+                else{
+                    uBio = users[u].bio;
+                }
+                if (users[u].recent==null){
+                    firebase.database().ref('users/' + users[u].userId + "/").update({recent: "N/A"});
+                    uRecent = "N/A";
+                }
+                else{
+                    uRecent = users[u].recent;
+                }
+                if (users[u].book==null){
+                    firebase.database().ref('users/' + users[u].userId + "/").update({book: "N/A"});
+                    uFavorite = "N/A";
+                }
+                else{
+                    uFavorite = users[u].book;
+                }
+                if (users[u].points==null){
+                    firebase.database().ref('users/' + users[u].userId + "/").update({points: 0});
+                    uPoints = 0;
+                }
+                else{
+                    uPoints = users[u].points;
+                }
+                
                 var display;
                 if (users[u].newName!=null){
                     display = users[u].newName;
@@ -502,28 +566,21 @@
                 else{
                     display = users[u].username;
                 }
+                mytab = mytab + "<td><center><img class='avatar' onclick='openUser(`" + display + "`,`" + users[u].email + "`,`" + users[u].profile_picture + "`,`" + uRecent + "`,`" + uFavorite + "`,`" + uPoints + "`,`" +uBio + "`,`" + uAge + "`,`" + "`)' src='" + users[u].profile_picture + "' width='60px'></center></td>";
+                
                 mytab = mytab + "<td>" + display + "</td>";
                 mytab = mytab + "<td>" + users[u].email + "</td>";
                 
-                var isFriend = false;
+                //alert(users[u].username);
                 
-                if (users[u].userId == uID){
-                    isFriend = true;
-                }
-                else{
-                    isFriend = await checkUser(users[u].userId, uID);
-                }
-                //alert(isFriend);
-                
-                //friendToAdd = display;
+                isFriend = await checkUser(users[u].username, uID);
                 
                 if (!isFriend){
                     mytab = mytab + "<td><center><img id='add" + c + "' onclick='addFriend(" + c + ")' class='friendplus' src='plus.png' width='60px'></center></td>";
-                    /*mytab = mytab + "<td><center><img onclick='alert()' class='friendplus' src='plus.png' width='60px'></center></td>";*/
                 }
                 else{
                     mytab = mytab + "<td><center><img src='check.png' width='60px'></center></td>";
-                }   
+                } 
                     
                 mytab = mytab + "</tr>";
             }
@@ -536,6 +593,8 @@
         
         function checkUser(usersId, uID){
             
+            //alert(usersId);
+            
             var isFriend = false;
             
             return new Promise(function(resolve, reject) {
@@ -544,12 +603,13 @@
                     dataarray = [userdata];
                     console.log(dataarray);
 
-                    users2 = dataarray[0];
+                    users2 = userdata;
 
                     for (var x in users2) {
                         //alert(users2[x].userId + " = " + usersId);
-                        if (users2[x].userId == usersId || usersId == uID) {
+                        if (users2[x].uName == usersId || usersId == name) {
                             isFriend = true;
+                            //alert(users2[x].userId);
                         }
                     }
 
@@ -585,16 +645,9 @@
                            if (count == userCount){
                                //alert("yes");
                                //alert(count);
-                                var display1;
-                                if (users1[u].newName!=null){
-                                    display1 = users1[u].newName;
-                                }
-                                else{
-                                    display1 = users1[u].username;
-                                }
                                 //alert(display1);
                                 //alert(users1[u].userId);
-                                firebase.database().ref('users/' + userId + "/friends/").push({uName: display1, userId: users1[u].userId});
+                                firebase.database().ref('users/' + userId + "/friends/").push({uName: users1[u].username, userId: users1[u].userId});
                            }
                        }
                     }
@@ -681,11 +734,11 @@
             str.style.color = "white";
         }
         
-        function updateModal(data, usersId){
+        function updateModal(data){
             users = data[1];
             data = data[0];
             photodiv = document.getElementById("modalphoto");
-            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p></center>";
+            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'>";
             var yourUsername = "";
             var yourPic = "";
             var yourAge = "";
@@ -699,7 +752,9 @@
             
             for (var u in data) {
                 
-                if (users[u].userId = usersId && !updated){
+                if (users[u].username = name && !updated){
+                    
+                    modalcontent = modalcontent + "<p class='modaltext'>Title: " + users[u].title + "<br>Points: " + users[u].points + "</p><a href='profile.html'><button class='edit'>Edit Profile</button></a></center>";
                     
                     updated = true;
                     
@@ -758,6 +813,85 @@
             
         }
         
+        /*function updateModal(data, usersId){
+            users = data[1];
+            data = data[0];
+            photodiv = document.getElementById("modalphoto");
+            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p></center>";
+            var yourUsername = "";
+            var yourPic = "";
+            var yourAge = "";
+            var yourBio = "";
+            var yourEmail = "";
+            var yourName = "";
+            var yourFav = "";
+            var yourRecent = "";
+            
+            alert(name);
+            
+            var updated = false;
+            
+            for (var u in data) {
+                
+                if (users[u].username = name && !updated){
+                    
+                    updated = true;
+                    
+                    if (users[u].newName != null) {
+                        yourUsername = users[u].newName;
+                    } 
+                    else {
+                        yourUsername = users[u].username;
+                    }
+
+                    if (users[u].newPic != null) {
+                        yourPic = users[u].newPic;
+                    }
+                    else {
+                        yourPic = users[u].profile_picture;
+                    }
+
+                    if (users[u].email != null) {
+                        yourEmail = users[u].email;
+                    }
+
+                    if (users[u].bio != null) {
+                        yourBio = users[u].bio;
+                    }
+                    else{
+                        yourBio = "N/A"
+                    }
+
+                    if (users[u].age != null) {
+                        yourAge = users[u].age;
+                    }
+                    else{
+                        yourAge = "N/A"
+                    }
+
+                    if (users[u].book != null) {
+                        yourFav = users[u].book;
+                    }
+                    else{
+                        yourFav = "N/A"
+                    }
+
+                    if (users[u].recent != null) {
+                        yourRecent = users[u].recent;
+                    }
+                    else{
+                        yourRecent = "N/A"
+                    }
+                    
+                    modalcontent = modalcontent + "<center><p class='modaltext'>Username: " + yourUsername + "<br>Bio: " + yourBio + "<br>Age: " + yourAge + "<br>Favourite Book: " + yourFav + "<br>Most Recent Read: " + yourRecent + "</p></center>";
+                    photodiv.innerHTML = modalcontent;
+                    
+                }
+                
+            }
+            
+        }*/
+        
         function searchFunction() {
           // Declare variables 
           var input, filter, table, tr, td, i, txtValue;
@@ -812,6 +946,19 @@
             photodiv = document.getElementById("modalphoto");
         }
         
+        function openUser(uName, uEmail, uPic, uRecent, uFavorite, uPoints, uBio, uAge){
+            var modal = document.getElementById('profModal');
+            modal.style.display = "block";
+            contentdiv = document.getElementById("profcontent");
+            var modalcontent = "<center><img src='" + uPic + "' style='max-height:200px; border-radius:10px'><div style='text-align:left; margin-left:40%'><br><h3>Name: " + uName + "<br><br>Email: " + uEmail + "<br><br>Bio: " + uBio + "<br><br>Age: " + uAge + "<br><br>Recent Read: " + uRecent + "<br><br>Favorite Book: " + uFavorite + "<br><br>Points: " + uPoints + "<br></h3></div></center>";
+            contentdiv.innerHTML = modalcontent;
+        }
+        
+        function closeprofModal(){
+            var modal = document.getElementById('profModal');
+            modal.style.display = "none";
+        }
+        
     </script>
 
     
@@ -854,7 +1001,7 @@
             </span>
         </div>
         
-        <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for names..">
+        <input style="border-radius:10px" type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for names..">
         <!--<i class="fas fa-arrow-circle-up" style="float: right; font-size: 35; margin-top: 5px;"></i>-->
         
         <br>
@@ -879,6 +1026,16 @@
           <div class="modal-content">
             <span class="closes" onclick="closeModal()">&times;</span>
             <div id="modalphoto"></div>
+          </div>
+
+        </div>
+        
+        <div id="profModal" class="modal" style="display: none;">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="closes" onclick="closeprofModal()">&times;</span>
+            <div id="profcontent"></div>
           </div>
 
         </div>
