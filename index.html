@@ -2,6 +2,9 @@
     
     <head>
         
+        <script src="https://www.gstatic.com/firebasejs/5.7.3/firebase.js"></script>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
         
         <style>
@@ -127,6 +130,60 @@
             
         </style>
         
+        <script>
+            
+            var config = {
+                apiKey: "AIzaSyDPVd7G8313nLPFN8vBribM8Sfma3Pac1o",
+                authDomain: "test-addbb.firebaseapp.com",
+                databaseURL: "https://test-addbb.firebaseio.com",
+                projectId: "test-addbb",
+                storageBucket: "test-addbb.appspot.com",
+                messagingSenderId: "267017042003"
+            };
+            firebase.initializeApp(config);
+            
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user == null) {
+                    alert("Not logged in.");
+
+                    signinbutton = document.getElementById("signin");
+                    signinbutton.style.visibility="visible";
+
+                    signoutbutton = document.getElementById("signout");
+                    signoutbutton.style.visibility="hidden";
+
+                    return;
+
+                } else {
+                    userId = user.uid;
+                    name = user.displayName;
+                    imageUrl = user.photoURL;
+                    email = user.email;
+
+                    writeUserData(userId, name, email, imageUrl);
+
+                } // end user null check
+            });
+            
+            function writeUserData(userId, name, email, imageUrl) {
+                firebase.database().ref('users/' + userId).update({
+                    username: name,
+                    email: email,
+                    profile_picture : imageUrl,
+                    userId: userId
+                });
+            }
+            
+            function signin() {
+                //alert("Signing In");
+                var provider = new firebase.auth.GoogleAuthProvider();
+                firebase.auth().signInWithRedirect(provider).then(function(result) {
+                    window.location.href="home.html";
+                });
+            }
+            
+        </script>
+        
     </head>
     
     <body>
@@ -137,7 +194,8 @@
             
             <br><br><br><br><br><br>
             
-            <center><a href="home.html"><button class="btn">Continue</button></a></center>
+            <!--<center><a href="home.html"><button class="btn">Continue</button></a></center>-->
+            <center><a href="home.html"><button class="btn" onclick="signin()">Continue</button></a></center>
             
         </div>
         
