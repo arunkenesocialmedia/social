@@ -429,6 +429,7 @@
         if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
             //alert("yay");
             isMobile=true;
+            document.getElementById("topnav").style.maxHeight = "80px";
         }
         else{
             isMobile=false;
@@ -938,7 +939,7 @@
         <a href=""><button class="btn" style="margin-right: 6%; width: 28%">Profile</button></a>-->
         
         
-        <div class="topnav">
+        <div class="topnav" id-"topnav">
             <i class="fas fa-gem" style="border-right: solid 1px white; padding-right: 8px"></i>  Crystal
             <span id="invis">
                 <span id="myphoto" height="60px;" style="float:right" onclick="openModal()"></span>
@@ -973,7 +974,7 @@
         
         <br>
         
-        <div id="prof">
+        <div id="prof" width="100%">
         
             <center>
                 <div class='loader'></div>
