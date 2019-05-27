@@ -7,12 +7,149 @@
     
     <style>
         
+        .edit{
+            border: solid 2px blue;
+            color: blue;
+            border-radius: 15px;
+            padding-right: 15px;
+            padding-left: 15px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            font-size: 15;
+            transition: 0.3s ease-out;
+        }
+        .edit:hover{
+            color: white;
+            background-color: blue;
+            cursor: pointer;
+        }
+        
+        .editbtn{
+            border: solid 2px blue;
+            color: blue;
+            border-radius: 15px;
+            padding-right: 15px;
+            padding-left: 15px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            font-size: 15;
+            transition: 0.3s ease-out;
+        }
+        .editbtn:hover{
+            color: white;
+            background-color: blue;
+            cursor: pointer;
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .videoinput{
+            color: blue;
+            border-radius: 15px;
+            padding: 10px;
+            margin-top: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-right: 15px;
+            padding-left: 15px;
+            border: solid 2px blue;
+        }
+        
+        .imageinput{
+            color: blue;
+            border-radius: 15px;
+            padding: 10px;
+            margin-top: 10px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-right: 15px;
+            padding-left: 15px;
+            border: solid 2px blue;
+            transition: 0.3s ease-out;
+        }
+        
+        .imageinput:hover{
+            background-color: blue;
+            border: solid 2px blue;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .popup {
+          position: relative;
+          cursor: pointer;
+            vertical-align: middle;
+            transform: translateX(-0);
+            -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+
+        /* The actual popup (appears on top) */
+        .popup .popuptext {
+          visibility: hidden;
+          width: 160px;
+          background-color: blue;
+          color: white;
+          text-align: center;
+          border-radius: 6px;
+          padding: 8px 0;
+          position: absolute;
+          z-index: 1;
+          bottom: 125%;
+          left: 50%;
+          margin-left: -80px;
+        }
+
+        /* Popup arrow */
+        .popup .popuptext::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin-left: -5px;
+          border-width: 5px;
+          border-style: solid;
+          border-color: #555 transparent transparent transparent;
+        }
+
+        /* Toggle this class when clicking on the popup container (hide and show the popup) */
+        .popup .show {
+          visibility: visible;
+          -webkit-animation: fadeIn 1s;
+          animation: fadeIn 1.5s ease-in-out;
+        }
+
+        /* Add animation (fade in the popup) */
+        @-webkit-keyframes fadeIn {
+          from {opacity: 0;} 
+          to {opacity: 1;}
+        }
+
+        @keyframes fadeIn {
+          from {opacity: 0;}
+          to {opacity:1 ;}
+        }
+        
         .zoom {
           transition: transform .25s; /* Animation */
         }
 
         .zoom:hover {
-          transform: scale(1.8); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+          transform: scale(1.3); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+            cursor: pointer;
+        }
+        
+        .like{
+            color: black;
+            font-size: 20;
+        }
+        
+        .like:hover{
+            color: blue;
             cursor: pointer;
         }
         
@@ -39,7 +176,7 @@
           border-radius: 50%;
           width: 200px;
           height: 200px;
-          animation: spin 2s ease-out infinite;
+          animation: spin 2s ease-in-out infinite;
         }
         
         @keyframes spin {
@@ -130,7 +267,8 @@
           border: 1px solid #888;
           width: 80%; /* Could be more or less, depending on screen size */
           border: solid 5px blue;
-          border-radius: 20px;
+          border-radius: 30px;
+          padding: 30px;
         }
 
         /* The Close Button */
@@ -205,18 +343,22 @@
         }
         
         .topnav {
+            width: 98%;
+          top: 0;
+          z-index: 10;
           overflow: hidden;
           background-color: black;
           border-bottom: 1px solid white;
+            padding: 10px;
+            max-height: 40px;
         }
 
         .topnav a {
-          float: left;
           color: #f2f2f2;
           text-align: center;
-          padding: 14px 16px;
           text-decoration: none;
           font-size: 17px;
+          z-index: 20;
         }
 
         .topnav a:hover {
@@ -282,13 +424,14 @@
             background-color: white;
             color: black;
             border: 3px solid black;
+            transition: 0.3s ease-out;
         }
         
         .submit:hover {
           padding: 8px 16px;
             background-color: blue;
             color: white;
-            border: 3px solid black;
+            border: 3px solid blue;
             cursor: pointer;
         }
         
@@ -345,17 +488,18 @@
             float: right;
             overflow: hidden;
             display: inline-block;
+            z-index: 20;
         }
 
         /* Dropdown Content (Hidden by Default) */
         .dropdown-content {
             display: none;
             position: absolute;
-            top: 55px;
+            top: 58px;
             background-color: white;
             min-width: 80px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.4);
-            z-index: 1;
+            z-index: 20;
         }
 
         /* Links inside the dropdown */
@@ -365,6 +509,7 @@
             text-decoration: none;
             display: block;
             float: none;
+            z-index: 20;
         }
 
         /* Change color of dropdown links on hover */
@@ -383,6 +528,9 @@
     
     </style>
     <script>
+        
+        var editTweetId = "";
+        var isMobile = false;
         
         
         // Initialize Firebase
@@ -443,9 +591,11 @@
                       firebase.database().ref('/users').once('value').then(function(snapshot) { 
                         var userdata = (snapshot.val());
                         if (userdata != null) {
-                           dataarray = [data,userdata]
+                           dataarray = [data,userdata];
+                           users1=dataarray[1];
                            console.log(dataarray);
-                           updatetweets(dataarray);
+                           orderTweets(dataarray);
+                           //updatetweets(dataarray);
                            updateModal(dataarray);
                         }
                       });
@@ -456,11 +606,20 @@
             } // end user null check
         }); // end check auth state
         
+        if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            //alert("yay");
+            isMobile=true;
+        }
+        else{
+            isMobile=false;
+            //alert("no");
+        }
+        
         function updateModal(data){
             users = data[1];
             data = data[0];
             photodiv = document.getElementById("modalphoto");
-            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p><a href='profile.html'><button class='edit'>Edit Profile</button></a></center>";
+            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'>";
             var yourUsername = "";
             var yourPic = "";
             var yourAge = "";
@@ -474,7 +633,9 @@
             
             for (var u in data) {
                 
-                if (users[u].userId = userId && !updated){
+                if (users[u].username = name && !updated){
+                    
+                    modalcontent = modalcontent + "<p class='modaltext'>Title: " + users[u].title + "<br>Points: " + users[u].points + "</p><a href='profile.html'><button class='edit'>Edit Profile</button></a></center>";
                     
                     updated = true;
                     
@@ -562,43 +723,160 @@
             });
         }
         
-        function updatetweets(data) {
-            //var mylist = "<ul>";
-            //var mytab = "<center><table><tr><th>Photo</th><th>Username</th><th>Message</th><th>Time Posted</th></tr>";
-            var mytab = "<center><div width='80&'>";
+        function newTitle(){
+            firebase.database().ref('users/' + userId + '/').update({title: "Beginner"});
+        }
+        
+        var tweetsOrder = [];
+        var usersOrder = [];
+        
+        async function orderTweets(datanew){
+            firebase.database().ref('/users').once('value').then(function(snapshot) {
+                var users = (snapshot.val());
+
+                firebase.database().ref('/tweets').once('value').then(function(snapshot) {
+
+                    var data = (snapshot.val());    
+
+
+                            if (tweetsOrder.length < 10) {
+
+                                for (var u in data) {
+
+                                    var followingUser = false;
+
+                                    var userID = users[u].userId;
+
+                                    for (var u2 in users[userId].friends) {
+                                        if (users[userId].friends[u2].uName == users[u].username) {
+                                            followingUser = true;
+                                        }
+                                    }
+
+
+                                    if (followingUser) {
+                                        
+                                        var tweetKeys = Object.keys(data[u]);
+                                        var tweetNum = -1;
+                                        //var tweetkey;
+
+                                        for (var t in data[u]) {
+
+                                            tweetNum++;
+                                            
+                                            var tweetkey = tweetKeys[tweetNum];
+                                            var tweetTime = data[u][t].time;
+
+                                            if (tweetsOrder.length == 0) {
+                                                tweetsOrder[0] = tweetkey;
+                                                usersOrder[0] = userID;
+                                            } else if (tweetsOrder.length == 1) {
+
+                                                var tweet1time = data[usersOrder[0]][tweetsOrder[0]].time;
+                                                if (tweetTime > tweet1time) {
+                                                    tweetsOrder.splice(0,0,tweetkey);
+                                                    usersOrder.splice(0,0,userID);
+                                                } else  {
+                                                    tweetsOrder[1] = tweetKey;
+                                                    usersOrder[1] = userID;
+                                                } 
+
+                                            } else {
+                                                for (var i = 0; i < tweetsOrder.length; i++) {
+                                                    if (i == 0) {
+
+                                                        if (tweetTime > data[usersOrder[0]][tweetsOrder[0]].time) {
+                                                        tweetsOrder.splice(0,0,tweetkey);
+                                                        usersOrder.splice(0,0,userID);
+                                                        }
+
+                                                    } else if (i == tweetsOrder.length - 1) {
+                                                        if (tweetTime < data[usersOrder[i-1]][tweetsOrder[i-1]].time) {
+                                                        tweetsOrder[tweetsOrder.length] = tweetKey;
+                                                        usersOrder[tweetsOrder.length] = userID;
+                                                        }
+                                                    } else if (tweetTime < data[usersOrder[i-1]][tweetsOrder[i-1]].time && tweetTime > data[usersOrder[i]][tweetsOrder[i]].time) {
+                                                        tweetsOrder.splice(i,0,tweetkey);
+                                                        usersOrder.splice(i,0,userID);
+                                                    }
+                                                }   
+
+                                            }
+
+                                         }
+                                      } 
+                                }
+
+                            }
+
+                        console.log(tweetsOrder);
+                        updatetweets(datanew);
+
+
+                });
+            });
+        }
+        
+        async function updatetweets(data){
+            
+            var mytab = "<center><div width='80%'>";
             users = data[1]; // put on top, because changed data - not good coding change later
             data = data[0];
-            var tweetsPresent = false;
             
-            for (var u in data) {
+            while (tweetsOrder.length>0){
+                for (var u in data) {
                 
-                var tweetKeys = Object.keys(data[u]);
                 var isUser = false;
                 
                 var uID = users[u].userId;
                 
                 if (uID == userId) {
-                    isUser = true;
+                   isUser = true;
                 }
+                
+                //alert(users[u].username);
                 
                 var tweetKeys = Object.keys(data[u]);
                 var tweetNum = -1;
+                var tKey;
+                    
+                
                 
                 for (var t in data[u]) {
                     
                     tweetNum++;
                     
-                    var tKey = "hi";
+                    tKey = "hi";
                     tKey = tweetKeys[tweetNum];
                     
-                    if (data[u][t].tag==null || data[u][t].tag==""){
-                        mytab = mytab + "<div class='container'>";
+                    //alert(tKey);
+                    
+                    if ((data[u][t].tag==null || data[u][t].tag=="") && tKey==tweetsOrder[0]){
+                        
+                        mytab = mytab + "<div class='container'><div style='border-bottom: solid 2px blue; padding: 5px; background-color: cyan; border-top-left-radius: 10px; border-top-right-radius: 10px;'>";
                         //mytab = mytab + "<tr>";
                         tweetsPresent = true;
                         var date = new Date(data[u][t].time);
                         var time = date.toString();
                         date2 = Date.now() - date;
                         var timeFrom;
+                        
+                        var time2;
+                        var AM = "A.M";
+                        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                        var dd = date.getDate();
+                        var mm = date.getMonth();
+                        var yyyy = date.getFullYear();
+                        var h = date.getHours();
+                        var min = date.getMinutes();
+                        if(h > 12) {
+                            h = h - 12;
+                            AM = "P.M";
+                        }
+                        if(min < 10) {
+                            min = "0" + min;
+                        }
+                        time2 = ("Shared at "  + h + ":" + min + " " + AM + ". on " + months[mm] + " " + dd + ", " + yyyy + ".").toString();
                         
                         if (date2>=(525600*60000)){
                             var timeAgo = Math.round(date2/(525600*60000));
@@ -666,7 +944,247 @@
                                 timeFrom = timeAgo + " seconds ago";
                             }
                         }
-                        mytab = mytab + "<img class='avatar1 zoom' src='" + users[u].profile_picture + "' width='50px' style='float: left'>";
+                        
+                        
+                        
+                        
+                        var uAge, uRecent, uFavorite, uPoints, uBio;
+                        if (users[u].age==null){
+                            firebase.database().ref('users/' + users[u].userId + "/").update({age: "N/A"});
+                            uAge = "N/A";
+                        }
+                        else{
+                            uAge = users[u].age;
+                        }
+                        if (users[u].bio==null){
+                            firebase.database().ref('users/' + users[u].userId + "/").update({bio: "N/A"});
+                            uBio = "N/A";
+                        }
+                        else{
+                            uBio = users[u].bio;
+                        }
+                        if (users[u].recent==null){
+                            firebase.database().ref('users/' + users[u].userId + "/").update({recent: "N/A"});
+                            uRecent = "N/A";
+                        }
+                        else{
+                            uRecent = users[u].recent;
+                        }
+                        if (users[u].book==null){
+                            firebase.database().ref('users/' + users[u].userId + "/").update({book: "N/A"});
+                            uFavorite = "N/A";
+                        }
+                        else{
+                            uFavorite = users[u].book;
+                        }
+                        if (users[u].points==null){
+                            firebase.database().ref('users/' + users[u].userId + "/").update({points: 0});
+                            uPoints = 0;
+                        }
+                        else{
+                            uPoints = users[u].points;
+                        }
+                        
+                        
+                        
+                        
+                        var display = users[u].newName;
+                        if (users[u].newName!=null){
+                            display = users[u].newName;
+                        }
+                        else{
+                            display = users[u].username;
+                        }
+                        
+                        mytab = mytab + "<img onclick='openUser(`" + display + "`,`" + users[u].email + "`,`" + users[u].profile_picture + "`,`" + uRecent + "`,`" + uFavorite + "`,`" + uPoints + "`,`" +uBio + "`,`" + uAge + "`,`" + "`)' class='avatar1 zoom' src='" + users[u].profile_picture + "' width='50px' style='float: left'>";
+                        
+                        if (users[u].title==null || users[u].title==""){
+                            alert(users[u].userId);
+                            var a = "Beginner";
+                            firebase.database().ref('users/' + users[u].userId + '/').update({title: a});
+                        }
+                        mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px'>" + display + "<br>(" + users[u].title + ") </h2></div>";
+                        
+                        if (data[u][t].img != "") {
+                            if (isMobile){
+                                
+                            }
+                            else{
+                                mytab = mytab + "<div id='tweet" + tKey + "'><h3 class='tweettext'>" + data[u][t].tweet + "</h3></div><center><img src='" + data[u][t].img + "' style='max-width:30%'></center><br>";
+                            }
+                        }
+                        else if (data[u][t].vid!="" && data[u][t].vid!=null){
+                            mytab = mytab + "<div id='tweet" + tKey + "'><h3 class='tweettext'>" + data[u][t].tweet + "</h3></div><center><iframe src='" + data[u][t].vid + "' height='50%' width='70%'></iframe></center><br>";
+                        }
+                        else{
+                            mytab = mytab + "<div id='tweet" + tKey + "'><h3 class='tweettext'>" + data[u][t].tweet + "</h3></div>";
+                        }
+                        
+                        var likedThis = false;
+                        
+                        for (var l in data[u][t].likers){
+                            //alert(data[u][t].likers[l].userName);
+                            if (data[u][t].likers[l].userName == name){
+                                likedThis = true;
+                            }
+                        }
+                        
+                        if (likedThis){
+                            mytab = mytab + "<center><i style='color: blue' id='" + tKey + "' onclick='like(`" + users[u].userId + "`, `" + tKey + "`)' class='fas fa-thumbs-up like'> " + data[u][t].likes + "</i></center>";
+                        }
+                        else if (data[u][t].likes==null){
+                            mytab = mytab + "<center><i id='" + tKey + "' onclick='like(`" + users[u].userId + "`, `" + tKey + "`)' class='fas fa-thumbs-up like'> 0</i></center>";
+                        }
+                        else{
+                            mytab = mytab + "<center><i id='" + tKey + "' onclick='like(`" + users[u].userId + "`, `" + tKey + "`)' class='fas fa-thumbs-up like'> " + data[u][t].likes + "</i></center>";
+                        }
+                        
+                        //mytab = mytab + "<center><button onclick='like(" + u + "," + t + ")'>Like</button></center><br>";
+                        //mytab = mytab + "<center><button onclick='like(`" + users[u].userId + "`, `" + tKey + "`)'>Like</button></center><br>";
+                        //mytab = mytab + "<center><i id='" + tKey + "' onclick='like(`" + users[u].userId + "`, `" + tKey + "`)' class='fas fa-thumbs-up like'></i></center><br>";
+                        mytab = mytab + "<center><span class='popup' onclick='popUp(" + data[u][t].time + ")'><span class='popuptext' id='time" + data[u][t].time + "'>" + time2 + "</span><h2 style='font-size: 20; color: blue; padding-top: 20px'>(" + timeFrom + ")</h2></span></center>"
+                        
+                        if (isUser){
+                            mytab = mytab + "<center><button class='editbtn' onclick='edit(`" + tKey + "`)'>Edit</button><br><br>";
+                        }
+                        mytab = mytab + "</div>";
+                        tweetsOrder = tweetsOrder.slice(1,tweetsOrder.length);
+                        //mytab = mytab + "</tr>";xw
+                    }
+                }  
+            }
+            }
+            mytab = mytab + "</div></center>"
+            var mytdiv = document.getElementById("mytweets");
+            //mytdiv.innerHTML = mylist;
+            mytdiv.innerHTML = mytab;
+        }
+        
+        /*async function updatetweets1(data) {
+            //var mylist = "<ul>";
+            //var mytab = "<center><table><tr><th>Photo</th><th>Username</th><th>Message</th><th>Time Posted</th></tr>";
+            var mytab = "<center><div width='80%'>";
+            users = data[1]; // put on top, because changed data - not good coding change later
+            data = data[0];
+            var tweetsPresent = false;
+            
+            for (var u in data) {
+                
+                var isUser = false;
+                
+                var uID = users[u].userId;
+                
+                if (uID == userId) {
+                   isUser = true;
+                }
+                
+                
+                var tweetKeys = Object.keys(data[u]);
+                var tweetNum = -1;
+                var tKey;
+                
+                for (var t in data[u]) {
+                    
+                    tweetNum++;
+                    
+                    tKey = "hi";
+                    tKey = tweetKeys[tweetNum];
+                    
+                    //alert(tKey);
+                    
+                    if (data[u][t].tag==null || data[u][t].tag==""){
+                        mytab = mytab + "<div class='container'><div style='border-bottom: solid 2px blue; padding: 5px; background-color: cyan; border-top-left-radius: 10px; border-top-right-radius: 10px;'>";
+                        //mytab = mytab + "<tr>";
+                        tweetsPresent = true;
+                        var date = new Date(data[u][t].time);
+                        var time = date.toString();
+                        date2 = Date.now() - date;
+                        var timeFrom;
+                        
+                        var time2;
+                        var AM = "A.M";
+                        var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                        var dd = date.getDate();
+                        var mm = date.getMonth();
+                        var yyyy = date.getFullYear();
+                        var h = date.getHours();
+                        var min = date.getMinutes();
+                        if(h > 12) {
+                            h = h - 12;
+                            AM = "P.M";
+                        }
+                        if(min < 10) {
+                            min = "0" + min;
+                        }
+                        time2 = ("Shared at "  + h + ":" + min + " " + AM + ". on " + months[mm] + " " + dd + ", " + yyyy + ".").toString();
+                        
+                        if (date2>=(525600*60000)){
+                            var timeAgo = Math.round(date2/(525600*60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                //mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px; float: right; padding-right: 20px'>(1 year ago)</h2>";
+                                timeFrom = "1 year ago";
+                            }
+                            else{
+                                //mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px; float: right; padding-right: 20px'>(" + timeAgo + " years ago)</h2>";
+                                timeFrom = timeAgo + " years ago";
+                            }
+                        }
+                        else if (date2>=(43200*60000)){
+                            var timeAgo = Math.round(date2/(43200*60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                //mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px; float: right; padding-right: 20px'>(1 month ago)</h2>";
+                                timeFrom = "1 month ago";
+                            }
+                            else{
+                                //mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px; float: right; padding-right: 20px'>(" + timeAgo + " months ago)</h2>";
+                                timeFrom = timeAgo + " months ago";
+                            }
+                        }
+                        else if (date2>=(1440*60000)){
+                            var timeAgo = Math.round(date2/(1440*60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                //mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px; float: right; padding-right: 20px'>(1 day ago)</h2>";
+                                timeFrom = "1 day ago";
+                            }
+                            else{
+                                //mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px; float: right; padding-right: 20px'>(" + timeAgo + " days ago)</h2>";
+                                timeFrom = timeAgo + " days ago";
+                            }
+                        }
+                        else if (date2>=(60*60000)){
+                            var timeAgo = Math.round(date2/(60*60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                //mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px; float: right; padding-right: 20px'>(1 hour ago)</h2>";
+                                timeFrom = "1 hour ago";
+                            }
+                            else{
+                                //mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px; float: right; padding-right: 20px'>(" + timeAgo + " hours ago)</h2>";
+                                timeFrom = timeAgo + " hours ago";
+                            }
+                        }
+                        else if (date2>=(60000)){
+                            var timeAgo = Math.round(date2/(60000));
+                            if (timeAgo==0 || timeAgo==1){
+                                //mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px; float: right; padding-right: 20px'>(1 minute ago)</h2>";
+                                timeFrom = "1 minute ago";
+                            }
+                            else{
+                                //mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px; float: right; padding-right: 20px'>(" + timeAgo + " minutes ago)</h2>";
+                                timeFrom = timeAgo + " minutes ago";
+                            }
+                        }
+                        else{
+                            var timeAgo = Math.round(date2/(1000));
+                            if (timeAgo==0 || timeAgo==1){
+                                //mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px; float: right; padding-right: 20px'>(1 second ago)</h2>";
+                                timeFrom = "1 second ago";
+                            }
+                            else{
+                                //mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px; float: right; padding-right: 20px'>(" + timeAgo + " seconds ago)</h2>";
+                                timeFrom = timeAgo + " seconds ago";
+                            }
+                        }
+                        
                         var display;
                         if (users[u].newName!=null){
                             display = users[u].newName;
@@ -674,20 +1192,98 @@
                         else{
                             display = users[u].username;
                         }
-                        mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px'>" + display + "<br>(" + timeFrom + ")</h2>";
                         
-                        if (data[u][t].img != "") {
-                            mytab = mytab + "<h3 class='tweettext'>" + data[u][t].tweet + "</h3><center><img src='" + data[u][t].img + "' height='40%'></center><br>";
-                        }
-                        else if (data[u][t].vid!="" && data[u][t].vid!=null){
-                            mytab = mytab + "<h3 class='tweettext'>" + data[u][t].tweet + "</h3><center><iframe src='" + data[u][t].vid + "' height='50%' width='70%'></iframe></center><br>";
+                        
+                        var uAge, uRecent, uFavorite, uPoints, uBio;
+                        if (users[u].age==null){
+                            firebase.database().ref('users/' + users[u].userId + "/").update({age: "N/A"});
+                            uAge = "N/A";
                         }
                         else{
-                            mytab = mytab + "<h3 class='tweettext'>" + data[u][t].tweet + "</h3>";
+                            uAge = users[u].age;
                         }
-                        mytab = mytab + "<center><button onclick='like()'>Like</button></center><br>";
+                        if (users[u].bio==null){
+                            firebase.database().ref('users/' + users[u].userId + "/").update({bio: "N/A"});
+                            uBio = "N/A";
+                        }
+                        else{
+                            uBio = users[u].bio;
+                        }
+                        if (users[u].recent==null){
+                            firebase.database().ref('users/' + users[u].userId + "/").update({recent: "N/A"});
+                            uRecent = "N/A";
+                        }
+                        else{
+                            uRecent = users[u].recent;
+                        }
+                        if (users[u].book==null){
+                            firebase.database().ref('users/' + users[u].userId + "/").update({book: "N/A"});
+                            uFavorite = "N/A";
+                        }
+                        else{
+                            uFavorite = users[u].book;
+                        }
+                        if (users[u].points==null){
+                            firebase.database().ref('users/' + users[u].userId + "/").update({points: 0});
+                            uPoints = 0;
+                        }
+                        else{
+                            uPoints = users[u].points;
+                        }
+                        
+                        mytab = mytab + "<img onclick='openUser(`" + display + "`,`" + users[u].email + "`,`" + users[u].profile_picture + "`,`" + uRecent + "`,`" + uFavorite + "`,`" + uPoints + "`,`" +uBio + "`,`" + uAge + "`,`" + "`)' class='avatar1 zoom' src='" + users[u].profile_picture + "' width='50px' style='float: left'>";
+                        
+                        if (users[u].title==null || users[u].title==""){
+                            alert(users[u].userId);
+                            var a = "Beginner";
+                            firebase.database().ref('users/' + users[u].userId + '/').update({title: a});
+                        }
+                        mytab = mytab + "<h2 style='font-size: 20; color: blue; padding-top: 20px'>" + display + "<br>(" + users[u].title + ") </h2></div>";
+                        
+                        if (data[u][t].img != "") {
+                            if (isMobile){
+                                
+                            }
+                            else{
+                                mytab = mytab + "<div id='tweet" + tKey + "'><h3 class='tweettext'>" + data[u][t].tweet + "</h3></div><center><img src='" + data[u][t].img + "' style='max-width:30%'></center><br>";
+                            }
+                        }
+                        else if (data[u][t].vid!="" && data[u][t].vid!=null){
+                            mytab = mytab + "<div id='tweet" + tKey + "'><h3 class='tweettext'>" + data[u][t].tweet + "</h3></div><center><iframe src='" + data[u][t].vid + "' height='50%' width='70%'></iframe></center><br>";
+                        }
+                        else{
+                            mytab = mytab + "<div id='tweet" + tKey + "'><h3 class='tweettext'>" + data[u][t].tweet + "</h3></div>";
+                        }
+                        
+                        var likedThis = false;
+                        
+                        for (var l in data[u][t].likers){
+                            //alert(data[u][t].likers[l].userName);
+                            if (data[u][t].likers[l].userName == name){
+                                likedThis = true;
+                            }
+                        }
+                        
+                        if (likedThis){
+                            mytab = mytab + "<center><i style='color: blue' id='" + tKey + "' onclick='like(`" + users[u].userId + "`, `" + tKey + "`)' class='fas fa-thumbs-up like'> " + data[u][t].likes + "</i></center>";
+                        }
+                        else if (data[u][t].likes==null){
+                            mytab = mytab + "<center><i id='" + tKey + "' onclick='like(`" + users[u].userId + "`, `" + tKey + "`)' class='fas fa-thumbs-up like'> 0</i></center>";
+                        }
+                        else{
+                            mytab = mytab + "<center><i id='" + tKey + "' onclick='like(`" + users[u].userId + "`, `" + tKey + "`)' class='fas fa-thumbs-up like'> " + data[u][t].likes + "</i></center>";
+                        }
+                        
+                        //mytab = mytab + "<center><button onclick='like(" + u + "," + t + ")'>Like</button></center><br>";
+                        //mytab = mytab + "<center><button onclick='like(`" + users[u].userId + "`, `" + tKey + "`)'>Like</button></center><br>";
+                        //mytab = mytab + "<center><i id='" + tKey + "' onclick='like(`" + users[u].userId + "`, `" + tKey + "`)' class='fas fa-thumbs-up like'></i></center><br>";
+                        mytab = mytab + "<center><span class='popup' onclick='popUp(" + data[u][t].time + ")'><span class='popuptext' id='time" + data[u][t].time + "'>" + time2 + "</span><h2 style='font-size: 20; color: blue; padding-top: 20px'>(" + timeFrom + ")</h2></span></center>"
+                        
+                        if (isUser){
+                            mytab = mytab + "<center><button class='editbtn' onclick='edit(`" + tKey + "`)'>Edit</button><br><br>";
+                        }
                         mytab = mytab + "</div>";
-                        //mytab = mytab + "</tr>";
+                        //mytab = mytab + "</tr>";xw
                     }
                 }   
             }
@@ -699,10 +1295,123 @@
             }
             //mytdiv.innerHTML = mylist;
             mytdiv.innerHTML = mytab;
+        }*/
+        
+        function popUp(tweetTime) {
+          var popup = document.getElementById("time"+tweetTime);
+          popup.classList.toggle("show");
         }
         
-        function like(){
+        function edit(tweetId){
+            //alert(tweetId);
+            editTweetId = tweetId;
+            var tweetEdit = document.getElementById("tweet"+tweetId).innerHTML;
+            document.getElementById("originaltweet").innerHTML = tweetEdit;
+            document.getElementById("editModal").style.display = "block";
+            //alert(tweetEdit.innerHTML);
+            //document.getElementById("editSubmit").onclick = "submitEdit(" + tweetId + ")";
+            //var submitbutton = document.getElementById("editSubmit");
+            //submitbutton.onclick = "alert()";
+        }
+        
+        function closeEdit(){
+            var twit = document.getElementById('editModal');
+            if (twit.style.display=="none"){
+                twit.style.display = "block";
+            }
+            else{
+                twit.style.display = "none";
+            }
+        }
+        
+        function submitEdit(){
+            //alert("yay");
+            //alert(editTweetId);
+            var newtweet = document.getElementById("newtweet").value;
+            firebase.database().ref('tweets/' + userId + "/" + editTweetId + "/").update({tweet: newtweet});
+            closeEdit();
+            document.getElementById("tweet"+editTweetId).innerHTML = "<h3 class='tweettext'>" + newtweet + "</h3>";
+        }
+        
+        function like(tweetOwner, tweetId){
+            //alert(tweetId);
+            var liked = false;
+            var thumbsUp = document.getElementById(tweetId);
+            thumbsUp.style.color = "blue";
             
+            firebase.database().ref('tweets/' + tweetOwner + "/" + tweetId + "/likers/").once('value').then(function(snapshot) {
+                var data = (snapshot.val());
+                if (data!=null){
+                    for (var l in data){
+                        alert("Liked Previously by " + data[l].userName);
+                        if (data[l].userName == name){
+                            liked = true;
+                        }
+                    }
+                }
+                
+                if (!liked){
+                    /*var title1="";
+                            
+                    if (userPoints<5){
+                        title1 = "Beginner";
+                    }
+                    else if (userPoints<10){
+                        title1 = "Novice";
+                    }
+                    else if (userPoints<30){
+                        title1 = "Casual Reader";
+                    }
+                    else if (userPoints<50){
+                        title1 = "Bookie";
+                    }
+                    else if (userPoints<75){
+                        title1 = "Avid Bookster";
+                    }
+                    else if (userPoints<100){
+                        title1 = "Author";
+                    }
+                    else if (userPoints<100){
+                        title1 = "Master";
+                    }
+                    else{
+                        title1 = "Bestseller";
+                    }*/
+                    
+                    alert("You Liked a Post!");
+                    thumbsUp.innerHTML = " " + (parseInt(thumbsUp.innerHTML.substring(1,2), 10)+1);
+                    
+                    firebase.database().ref('tweets/' + tweetOwner + "/" + tweetId + "/likers/").push({userName: name});
+                    //firebase.database().ref('users/' + tweetOwner + "/liked").push({tweetId: tweetId});
+                    firebase.database().ref('users/' + tweetOwner).once('value').then(function(snapshot) {
+                        var userdata = (snapshot.val());
+                        if (userdata.points == null){
+                            firebase.database().ref('users/' + tweetOwner + '/').update({points: 3});
+                        }
+                        else{
+                            var usersPoints = parseInt(userdata.points, 10) + 3;
+                            firebase.database().ref('users/' + tweetOwner + '/').update({points: usersPoints});
+                        }
+                        //alert(userdata.points);
+                    });
+                    firebase.database().ref('tweets/' + tweetOwner + "/" + tweetId).once('value').then(function(snapshot) {
+                        var tweetdata = (snapshot.val());
+                        if (tweetdata.likes == null){
+                            firebase.database().ref('tweets/' + tweetOwner + "/" + tweetId + '/').update({likes: 1});
+                        }
+                        else{
+                            var tweetLikes = parseInt(tweetdata.points, 10) + 1;
+                            firebase.database().ref('tweets/' + tweetOwner + "/" + tweetId + '/').update({likes: tweetLikes});
+                        }
+                        //alert(userdata.points);
+                    });
+                    
+                }
+                else{
+                    alert("Already Liked!");
+                }
+                
+            });
         }
         
         // write tweets to firebase
@@ -729,14 +1438,46 @@
                 var myChat = document.getElementById("myChat");
                 myChat.style.display = "none";
                 var js_time = Date.now();
-                var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, vid: vidValue});
+                firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, vid: vidValue});
                 twitdoc.value = "";
                 twitvid.value = "";
-                console.log("tweet written")
+                console.log("tweet written");
+                //alert("points");
+                
+                var usersPoints = parseInt(userdata.points, 10) + 3;
+                firebase.database().ref('users/' + userId + '/').update({points: usersPoints});
+                
+                var title="";
+                if (userPoints<5){
+                    title = "Beginner";
+                }
+                else if (userPoints<10){
+                    title = "Novice";
+                }
+                else if (userPoints<30){
+                    title = "";
+                }
+                else if (userPoints<50){
+                    title = "Bookie";
+                }
+                else if (userPoints<75){
+                    title = "Avid Bookster";
+                }
+                else if (userPoints<100){
+                    title = "Author";
+                }
+                else if (userPoints<100){
+                    title = "Master";
+                }
+                else{
+                    title = "Bestseller";
+                }
+
+                firebase.database().ref('users/' + userId + '/').update({title: title});
 
                 firebase.database().ref('/tweets').once('value').then(function(snapshot) {
                     var data = (snapshot.val());
-                    if (data == null) {
+                    /*if (data == null) {
                       console.log("No data found at /tweets/" + userId);  
                     } else { 
                         firebase.database().ref('/users').once('value').then(function(snapshot) { 
@@ -745,13 +1486,25 @@
                            dataarray = [data,userdata]
                            console.log(dataarray)
                            updatetweets(dataarray); 
+                            //ordertweets(dataarray);
                         }
                       });
+                    }*/
+                    var dataKeys = 0;
+                    var uKs = Object.keys(data);
+                    for (var u in data) {
+                        var tKeyC = 0;
+                        var tKs = Object.keys(data[u]);
+                        for (var t in data[u]) {
+                            firebase.database().ref('tweets/' + uKs[dataKeys] + "/" + tKs[tKeyC]).update({
+                                key: tKs[tKeyC]
+                            });
+                            tKeyC++;
+                        }
+                        dataKeys++;
                     }
                 });
             }
-            
-            
             
             
             
@@ -818,12 +1571,17 @@
           }
         }
         
-        function openUser(uName, uEmail, uPic){
-            var modal = document.getElementById('myModal');
+        function openUser(uName, uEmail, uPic, uRecent, uFavorite, uPoints, uBio, uAge){
+            var modal = document.getElementById('profModal');
             modal.style.display = "block";
-            photodiv = document.getElementById("modalphoto");
-            var modalcontent = "<center><p class='modaltext'>" + uName + "</p><img id='profilepic' src='" + uPic + "'style='max-height:300px; border-radius: 10px'></center>";
-            photodiv.innerHTML = modalcontent;
+            contentdiv = document.getElementById("profcontent");
+            var modalcontent = "<center><img src='" + uPic + "' style='max-height:200px; border-radius:10px'><div style='text-align:left; margin-left:40%'><br><h3>Name: " + uName + "<br><br>Email: " + uEmail + "<br><br>Bio: " + uBio + "<br><br>Age: " + uAge + "<br><br>Recent Read: " + uRecent + "<br><br>Favorite Book: " + uFavorite + "<br><br>Points: " + uPoints + "<br></h3></div></center>";
+            contentdiv.innerHTML = modalcontent;
+        }
+        
+        function closeprofModal(){
+            var modal = document.getElementById('profModal');
+            modal.style.display = "none";
         }
         
         function makeCyan(str){
@@ -917,22 +1675,50 @@
 
         </div>
         
+        <div id="profModal" class="modal" style="display: none;">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="closes" onclick="closeprofModal()">&times;</span>
+            <div id="profcontent"></div>
+          </div>
+
+        </div>
+        
+        <div id="editModal" class="modal" style="display: none;">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="closes" style='margin-right: 10px' onclick="closeEdit()">&times;</span>
+            <center><div id="editarea" width="100px">
+                <h2 style="color: black">Original Message:</h2>
+                <h3 style="color: blue" id="originaltweet"></h3>
+                <br>
+                <h2 style="color: black">New Message:</h2>
+                <input class="videoinput" width="300px" id="newtweet" type="text" placeholder="Enter New Message..." />
+                <br><br><br>
+                <center><button class="submit" id="editSubmit" type="button" onclick="submitEdit()">Update</button></center>
+            </div></center>
+          </div>
+
+        </div>
+        
         <div id="myChat" class="modal" style="display: none;">
 
           <!-- Modal content -->
-          <div class="modal-content" style="background-color: blue; padding: 30px; border-radius: 30px">
+          <div class="modal-content">
               <span class="closes" style='margin-right: 10px' onclick="closeTwit()">&times;</span>
               <br>
               <center><div id="formarea" width="100px">
                 
-                <h2 style="color: white">Upload a Message</h2>
+                <h2 style="color: black">Upload a Message</h2>
                 <form>
                     <textarea id="twit" style="border-radius: 10px;" type="text" name="thetweet" cols="100" rows="4"></textarea>
                 </form>
 
                 <button class="submit" type="button" onclick="tweet()" style="float: right; border-radius: 5px; margin-right: 5px; font-size: 20">Share</button>
-                <input style="margin-top: 10px" id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
-                <input style="margin-top: 10px; padding: 8px; border: solid 2px black" width="300px" id="videoupload" type="text" placeholder="Enter Video Link..." />
+                  <label class="imageinput"><input style="margin-top: 10px" id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />Choose Image</label>
+                <input class="videoinput" width="300px" id="videoupload" type="text" placeholder="Enter Video Link..." />
             
               </div></center>
           </div>
