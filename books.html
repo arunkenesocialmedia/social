@@ -9,6 +9,23 @@
     
     <style>
         
+        .edit{
+            border: solid 2px blue;
+            color: blue;
+            border-radius: 15px;
+            padding-right: 15px;
+            padding-left: 15px;
+            padding-top: 4px;
+            padding-bottom: 4px;
+            font-size: 15;
+            transition: 0.3s ease-out;
+        }
+        .edit:hover{
+            color: white;
+            background-color: blue;
+            cursor: pointer;
+        }
+        
         .reset{
             border: solid 2px black;
             font-size: 15;
@@ -109,7 +126,7 @@
 
         #myTable {
           /*border-collapse: collapse;*/ /* Collapse borders */
-          width: 100%; /* Full-width */
+          width: 90%; /* Full-width */
           border: 2px solid blue; /* Add a grey border */
           font-size: 18px; /* Increase font-size */
         }
@@ -196,6 +213,9 @@
           padding: 10px;
           border: 1px solid #888;
           width: 80%; /* Could be more or less, depending on screen size */
+          border: solid 5px blue;
+          border-radius: 30px;
+          padding: 30px;
         }
 
         /* The Close Button */
@@ -254,26 +274,31 @@
         }
         
         table {
-            width: 100%;
+            width: 80%;
         }
         
         .tweet:hover{
             background-color: lightgray;
             cursor: pointer;
         }
+        
         .topnav {
+          width: 98%;
+          top: 0;
+          z-index: 10;
           overflow: hidden;
           background-color: black;
           border-bottom: 1px solid white;
+            padding: 10px;
+            max-height: 40px;
         }
 
         .topnav a {
-          float: left;
           color: #f2f2f2;
           text-align: center;
-          padding: 14px 16px;
           text-decoration: none;
           font-size: 17px;
+          z-index: 20;
         }
 
         .topnav a:hover {
@@ -501,7 +526,6 @@
                 var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'></center>";
                 photodiv.innerHTML = modalcontent;
                 
-                showBooks();
 
                 firebase.database().ref('/users').once('value').then(function(snapshot) {
                     var data = (snapshot.val());
@@ -515,6 +539,7 @@
                            console.log(dataarray)
                            //updatetweets(dataarray); 
                             updateModal(dataarray);
+                            showBooks(dataarray);
                         }
                       //console.log(data)
                       //updatetweets(data);
@@ -556,7 +581,7 @@
             users = data[1];
             data = data[0];
             photodiv = document.getElementById("modalphoto");
-            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'><p class='modaltext'></p></center>";
+            var modalcontent = "<center><p class='modaltext'>" + name + "</p><img id='profilepic' src='" + imageUrl + "'style='max-height:300px; border-radius: 10px'>";
             var yourUsername = "";
             var yourPic = "";
             var yourAge = "";
@@ -570,7 +595,9 @@
             
             for (var u in data) {
                 
-                if (users[u].userId == userId && !updated){
+                if (users[u].username = name && !updated){
+                    
+                    modalcontent = modalcontent + "<p class='modaltext'>Title: " + users[u].title + "<br>Points: " + users[u].points + "</p><a href='profile.html'><button class='edit'>Edit Profile</button></a></center>";
                     
                     updated = true;
                     
@@ -650,23 +677,24 @@
             }
         }
         
-        function rate(n, b){
+        function rate(n, b1){
             for (var i = 1; i<=5; i++){
                 document.getElementById("star" + i).onmouseover = "";
                 document.getElementById("star" + i).onmouseout = "";
                 document.getElementById("star" + i).onclick = "";
             }
             var str = n.toString(10);
-            if (b==0){
+            var b = parseInt(10, b1);
+            if (b1=="0"){
                 var ratingid = firebase.database().ref('users/' + myUId).update({potter: str});
             }
-            else if (b==1){
+            else if (b1=="1"){
                 var ratingid = firebase.database().ref('users/' + myUId).update({jackson: str});
             }
-            else if (b==2){
+            else if (b1=="2"){
                 var ratingid = firebase.database().ref('users/' + myUId).update({four: str});
             }
-            else if (b==3){
+            else if (b1=="3"){
                 var ratingid = firebase.database().ref('users/' + myUId).update({wimpy: str});
             }
             else{
@@ -679,19 +707,19 @@
         function reset(b){
             alert("Rating reset. Reload Page");
             if (b==0){
-                var ratingid = firebase.database().ref('users/' + myUId).update({potter: "0"});
+                var ratingid = firebase.database().ref('users/' + myUId).update({potter: null});
             }
             else if (b==1){
-                var ratingid = firebase.database().ref('users/' + myUId).update({jackson: "0"});
+                var ratingid = firebase.database().ref('users/' + myUId).update({jackson: null});
             }
             else if (b==2){
-                var ratingid = firebase.database().ref('users/' + myUId).update({four: "0"});
+                var ratingid = firebase.database().ref('users/' + myUId).update({four: null});
             }
             else if (b==3){
-                var ratingid = firebase.database().ref('users/' + myUId).update({wimpy: "0"});
+                var ratingid = firebase.database().ref('users/' + myUId).update({wimpy: null});
             }
             else{
-                var ratingid = firebase.database().ref('users/' + myUId).update({hunger: "0"});
+                var ratingid = firebase.database().ref('users/' + myUId).update({hunger: null});
             }
         }
         
@@ -826,6 +854,7 @@
             bdisplay[2] = bdisplay[2] + "<li>Book Four: The Fall of Five</li>";
             bdisplay[2] = bdisplay[2] + "<li>Book Five: The Revenge of Seven</li>";
             bdisplay[2] = bdisplay[2] + "<li>Book Six: The Fate of Ten</li>";
+            bdisplay[2] = bdisplay[2] + "<li>Book Seven: United as One</li>";
             bdisplay[2] = bdisplay[2] + "</ul>";
             
             bdisplay[2] = bdisplay[2] + "<h3>Rating: </h3>";
@@ -871,7 +900,7 @@
                     bdisplay[3] = bdisplay[3] + "<i class='fas fa-star star' id='star"+(i+1)+"' style='filter: brightness(0.3)'></i>";
                 }
             }
-            bdisplay[3] = bdisplay[3] + "<br><br><button class='reset' onclick='reset(2)'>Reset Rating</button>";
+            bdisplay[3] = bdisplay[3] + "<br><br><button class='reset' onclick='reset(3)'>Reset Rating</button>";
             bdisplay[3] = bdisplay[3] + "</div>";
             
             
@@ -891,11 +920,11 @@
             
             bdisplay[4] = bdisplay[4] + "<h3>Rating: </h3>";
             if (!(hungerRating>0)){
-                bdisplay[4] = bdisplay[4] + "<i class='fas fa-star star' id='star1' onmouseover='starYellow(1)' onmouseout='starDark(1)' onclick='rate(1, 3)'></i>";
-                bdisplay[4] = bdisplay[4] + "<i class='fas fa-star star' id='star2' onmouseover='starYellow(2)' onmouseout='starDark(2)' onclick='rate(2, 3)'></i>";
-                bdisplay[4] = bdisplay[4] + "<i class='fas fa-star star' id='star3' onmouseover='starYellow(3)' onmouseout='starDark(3)' onclick='rate(3, 3)'></i>";
-                bdisplay[4] = bdisplay[4] + "<i class='fas fa-star star' id='star4' onmouseover='starYellow(4)' onmouseout='starDark(4)' onclick='rate(4, 3)'></i>";
-                bdisplay[4] = bdisplay[4] + "<i class='fas fa-star star' id='star5' onmouseover='starYellow(5)' onmouseout='starDark(5)' onclick='rate(5, 3)'></i>";
+                bdisplay[4] = bdisplay[4] + "<i class='fas fa-star star' id='star1' onmouseover='starYellow(1)' onmouseout='starDark(1)' onclick='rate(1, 4)'></i>";
+                bdisplay[4] = bdisplay[4] + "<i class='fas fa-star star' id='star2' onmouseover='starYellow(2)' onmouseout='starDark(2)' onclick='rate(2, 4)'></i>";
+                bdisplay[4] = bdisplay[4] + "<i class='fas fa-star star' id='star3' onmouseover='starYellow(3)' onmouseout='starDark(3)' onclick='rate(3, 4)'></i>";
+                bdisplay[4] = bdisplay[4] + "<i class='fas fa-star star' id='star4' onmouseover='starYellow(4)' onmouseout='starDark(4)' onclick='rate(4, 4)'></i>";
+                bdisplay[4] = bdisplay[4] + "<i class='fas fa-star star' id='star5' onmouseover='starYellow(5)' onmouseout='starDark(5)' onclick='rate(5, 4)'></i>";
             }
             else{
                 for (var i = 1; i<=hungerRating; i++){
@@ -905,7 +934,7 @@
                     bdisplay[4] = bdisplay[4] + "<i class='fas fa-star star' id='star"+(i+1)+"' style='filter: brightness(0.3)'></i>";
                 }
             }
-            bdisplay[4] = bdisplay[4] + "<br><br><button class='reset' onclick='reset(2)'>Reset Rating</button>";
+            bdisplay[4] = bdisplay[4] + "<br><br><button class='reset' onclick='reset(4)'>Reset Rating</button>";
             bdisplay[4] = bdisplay[4] + "</div>";
             
             document.getElementById("bookdisplay").innerHTML = bdisplay[b-1];
@@ -916,7 +945,7 @@
         
         function checkRating(n){
             
-            var rating = 0;
+            var rating;
             
             return new Promise(function(resolve, reject) {
                 firebase.database().ref('/users').once('value').then(function(snapshot) { 
@@ -928,25 +957,35 @@
 
                     for (var x in users2) {
                         //alert(users2[x].userId + " = " + usersId);
-                        if (users2[x].userId == myUId) {
+                        if (users2[x].userId == userId) {
                             if (n==0){
-                                rating = users2[x].potter;
+                                if (users2[u].potter!=null && users2[u].potter!="0"){
+                                    rating = parseInt(users2[x].potter, 10);
+                                }
                                 //alert(rating);
                             }
                             else if (n==1){
-                                rating = users2[x].jackson;
+                                if (users2[x].jackson!=null){
+                                    rating = parseInt(users2[x].jackson, 10);
+                                }
                                 //alert(rating);
                             }
                             else if (n==2){
-                                rating = users2[x].four;
+                                if (users2[x].four!=null){
+                                    rating = parseInt(users2[x].four, 10);
+                                }
                                 //alert(rating);
                             }
                             else if (n==3){
-                                rating = users2[x].wimpy;
+                                if (users2[x].wimpy!=null){
+                                    rating = parseInt(users2[x].wimpy, 10);
+                                }
                                 //alert(rating);
                             }
                             else if (n==4){
-                                rating = users2[x].hunger;
+                                if (users2[x].hunger!=null){
+                                    rating = parseInt(users2[x].hunger, 10);
+                                }
                                 //alert(rating);
                             }
                         }
@@ -959,38 +998,89 @@
             });
         }
         
-        function showBooks() {
+        function showBooks(data) {
             
-            var mytab = "<table id='myTable'>"
+            users = data[1];
+            data = data[0];
             
-            mytab = mytab + "<tr class='header'><th width='15%'>Cover</th><th>Title</th><th>Author</th><th>Number of Books</th></tr>";
+            var avgPotter = 0;
+            var avgJackson = 0;
+            var avgFour = 0;
+            var avgWimpy = 0;
+            var avgHunger = 0;
+            
+            var userCount = [];
+            userCount[0]=0;
+            userCount[1]=0;
+            userCount[2]=0;
+            userCount[3]=0;
+            userCount[4]=0;
+            
+            for (u in users){
+                if (users[u].potter!="" && users[u].potter!=null && users[u].potter!="0"){
+                    avgPotter = avgPotter + parseInt(users[u].potter, 10);
+                    userCount[0]++;
+                }
+                if (users[u].jackson!="" && users[u].jackson!=null && users[u].jackson!="0"){
+                    avgJackson = avgJackson + parseInt(users[u].jackson, 10);
+                    userCount[1]++;
+                }
+                if (users[u].four!="" && users[u].four!=null && users[u].four!="0"){
+                    avgFour = avgFour + parseInt(users[u].four, 10);
+                    userCount[2]++;
+                }
+                if (users[u].wimpy!="" && users[u].wimpy!=null && users[u].wimpy!="0"){
+                    avgWimpy = avgWimpy + parseInt(users[u].wimpy, 10);
+                    userCount[3]++;
+                }
+                if (users[u].hunger!="" && users[u].hunger!=null && users[u].wimpy!="0"){
+                    avgHunger = avgHunger + parseInt(users[u].hunger, 10);
+                    userCount[4]++;
+                }
+            }
+            
+            avgPotter = avgPotter/userCount[0];
+            avgJackson = avgJackson/userCount[1];
+            avgFour = avgFour/userCount[2];
+            avgWimpy = avgWimpy/userCount[3];
+            avgHunger = avgHunger/userCount[4];
+            
+            /*alert(avgPotter);
+            alert(avgJackson);
+            alert(avgFour);
+            alert(avgWimpy);
+            alert(avgHunger);*/
+            
+            var mytab = "<center><table id='myTable'>"
+            
+            mytab = mytab + "<tr class='header'><th width='15%'>Cover</th><th>Title</th><th>Author</th><th>Average Rating</th></tr>";
             
             mytab = mytab + "<tr onclick='openBook(1)'>";
             mytab = mytab + "<td style='padding: 0px' width='15%'><img src='potter.jpg' width='100%'></td>";
-            mytab = mytab + "<td width='40%'>Harry Potter</td> <td>J.K. Rowling</td> <td>7</td>";
+            mytab = mytab + "<td width='40%'>Harry Potter</td> <td>J.K. Rowling</td> <td>" + avgPotter + " <i class='fas fa-star star' style='filter:brightness(1)'></i></td>";
             mytab = mytab + "</tr>";
             
             mytab = mytab + "<tr onclick='openBook(2)'>";
             mytab = mytab + "<td style='padding: 0px' width='15%'><img src='jackson.jpg' width='100%'></td>";
-            mytab = mytab + "<td width='40%'>Percy Jackson and the Olympians</td> <td>Rick Riordan</td> <td>5</td>";
+            mytab = mytab + "<td width='40%'>Percy Jackson and the Olympians</td> <td>Rick Riordan</td> <td>" + avgJackson + " <i class='fas fa-star star' style='filter:brightness(1)'></i></td>";
             mytab = mytab + "</tr>";
             
             mytab = mytab + "<tr onclick='openBook(3)'>";
             mytab = mytab + "<td style='padding: 0px' width='15%'><img src='four.jpg' width='100%'></td>";
-            mytab = mytab + "<td width='40%'>I Am Number Four</td> <td>Pittacus Lore</td> <td>7</td>";
+            mytab = mytab + "<td width='40%'>I Am Number Four</td> <td>Pittacus Lore</td> <td>" + avgFour + " <i class='fas fa-star star' style='filter:brightness(1)'></i></td>";
             mytab = mytab + "</tr>";
             
             mytab = mytab + "<tr onclick='openBook(4)'>";
             mytab = mytab + "<td style='padding: 0px' width='15%'><img src='diary.jpg' width='100%'></td>";
-            mytab = mytab + "<td width='40%'>Diary of a Wimpy Kid</td> <td>Jeff Kinney</td> <td>21</td>";
+            mytab = mytab + "<td width='40%'>Diary of a Wimpy Kid</td> <td>Jeff Kinney</td> <td>" + avgWimpy + " <i class='fas fa-star star' style='filter:brightness(1)'></i></td>";
             mytab = mytab + "</tr>";
             
             mytab = mytab + "<tr onclick='openBook(5)'>";
             mytab = mytab + "<td style='padding: 0px' width='15%'><img src='hunger.png' width='100%'></td>";
-            mytab = mytab + "<td width='40%'>Hunger Games</td> <td>Suzanne Collins</td> <td>3</td>";
+            mytab = mytab + "<td width='40%'>Hunger Games</td> <td>Suzanne Collins</td> <td>" + avgHunger + " <i class='fas fa-star star' style='filter:brightness(1)'></i></td>";
             mytab = mytab + "</tr>";
             
-            mytab = mytab + "</table>";
+            mytab = mytab + "</table></cetner>";
             
             mydiv = document.getElementById("mybooks");
             mydiv.innerHTML = mytab;
@@ -1134,11 +1224,15 @@
             if (booktitle==null || booktitle.length<1){
                 alert("Missing Required Field");
             }
-            if (bookauthor==null || bookauthor.length<1){
+            else if (bookauthor==null || bookauthor.length<1){
                 alert("Missing Required Field");
             }
-            
-            firebase.database().ref("suggestions/").push({title: booktitle, author: bookauthor});
+            else{   
+                //alert(booktitle);
+                //alert(bookauthor);
+                closeSuggestions();
+                var suggestid = firebase.database().ref('suggestions/').push({title: booktitle, author: bookauthor});
+            }
         }
         
     </script>
@@ -1185,7 +1279,7 @@
         
         <div id="topsearch">
             
-            <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for names..">
+            <input style="border-radius:20px" type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for books or authors..">
             <!--<i class="fas fa-arrow-circle-up" style="float: right; font-size: 35; margin-top: 5px;"></i>-->
             
         </div>
